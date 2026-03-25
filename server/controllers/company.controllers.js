@@ -36,3 +36,25 @@ export const registerCompany = async (req, res) => {
     });
   }
 };
+
+export const getCompanyDetailsByUser = async (req, res) => {
+  try {
+    const userId = req.id;
+    const companies = await Company.find({ userId: userId });
+
+    if (!companies) {
+      return res.status(404).json({
+        message: "No company found",
+        success: false,
+      });
+    }
+
+    return res.status(200).json({
+      message: "Companies found",
+      companies,
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
