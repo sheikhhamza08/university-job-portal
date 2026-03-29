@@ -117,3 +117,28 @@ export const getJobById = async (req, res) => {
     console.log(error);
   }
 };
+
+// role === "recruiter"
+export const getRecruiterJobs = async (req, res) => {
+  try {
+    const recruiterId = req.id;
+    const jobs = await Job.find({ created_by: recruiterId }).populate({
+      path: "company",
+      createdAt: -1,
+    });
+    if (!jobs) {
+      return res.status(404).json({
+        message: "No jobs found",
+        success: false,
+      });
+    }
+
+    return res.status(200).json({
+      message: "Jobs found",
+      jobs,
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
