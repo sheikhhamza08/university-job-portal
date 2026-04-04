@@ -3,6 +3,7 @@ import Login from "./components/auth/Login";
 import Signup from "./components/auth/Signup";
 import Browse from "./components/Browse";
 import Home from "./components/Home";
+import Jobs from "./components/Jobs";
 
 const appRouter = createBrowserRouter([
   // for student role
@@ -21,6 +22,10 @@ const appRouter = createBrowserRouter([
   {
     path: "/browse",
     element: <Browse />,
+  },
+  {
+    path: "/jobs",
+    element: <Jobs />,
   },
 ]);
 
