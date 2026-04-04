@@ -4,15 +4,19 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import {
+  Bell,
   BriefcaseBusiness,
   BuildingIcon,
+  ChevronDown,
   GraduationCap,
+  HelpCircle,
   Home,
   HomeIcon,
   LogOut,
   Menu,
   MenuIcon,
   SearchCheck,
+  Settings,
   User2,
 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
