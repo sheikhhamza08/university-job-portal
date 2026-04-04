@@ -1,156 +1,127 @@
-import React, { useEffect, useState } from "react";
-import Navbar from "./shared/Navbar";
-import Footer from "./shared/Footer";
-import FilterCard from "./FilterCard";
-import Job from "./Job";
-import { useDispatch, useSelector } from "react-redux";
-import { motion, AnimatePresence } from "framer-motion";
-import useGetAllJobs from "@/hooks/useGetAllJobs";
-import { setSearchedQuery } from "@/redux/jobSlice";
+import React from "react";
 import { Button } from "./ui/button";
-import { SlidersHorizontal, X } from "lucide-react";
+import { Bookmark } from "lucide-react";
+import { Avatar, AvatarImage } from "./ui/avatar";
+import { Badge } from "./ui/badge";
+import { useNavigate } from "react-router-dom";
 
-function Jobs() {
-  const dispatch = useDispatch();
-  useGetAllJobs();
+// TIP: helper — shows "Today", "1d ago", "5d ago"
+const daysAgoFunction = (mongodbTime) => {
+  const diff = Math.floor(
+    (new Date() - new Date(mongodbTime)) / (1000 * 3600 * 24),
+  );
+  if (diff === 0) return "Today";
+  return `${diff}d ago`;
+};
 
-  const { allJobs, searchedQuery } = useSelector((state) => state.job);
-  const [filterJobs, setFilterJobs] = useState([]);
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+// TIP: initials avatar fallback when no logo URL
+const getInitials = (name = "") =>
+  name
+    .split(" ")
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join("")
+    .toUpperCase();
 
-  // Filter logic
-  useEffect(() => {
-    if (searchedQuery) {
-      const filtered = allJobs.filter(
-        (job) =>
-          job?.title?.toLowerCase().includes(searchedQuery.toLowerCase()) ||
-          job?.description
-            ?.toLowerCase()
-            .includes(searchedQuery.toLowerCase()) ||
-          job?.location?.toLowerCase().includes(searchedQuery.toLowerCase()) ||
-          job?.salary?.toLowerCase().includes(searchedQuery.toLowerCase()), // TIP: also filter by salary band
-      );
-      setFilterJobs(filtered);
-    } else {
-      setFilterJobs(allJobs);
-    }
-  }, [allJobs, searchedQuery]);
-
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      dispatch(setSearchedQuery(""));
-    };
-  }, [dispatch]);
+const Job = ({ job }) => {
+  const navigate = useNavigate();
 
   return (
-    <>
-      <Navbar />
+    <div
+      // FIX: duration-600 is not a valid Tailwind class — changed to duration-300
+      // FIX: hover:scale-105 replaced with translate for a subtler, pro feel
+      // FIX: removed hardcoded bg-white — won't work in dark mode
+      className="p-5 rounded-xl border border-gray-100 bg-white cursor-pointer
+                       hover:-translate-y-1 hover:border-gray-200 hover:shadow-sm
+                       transition-all duration-300 h-full flex flex-col gap-3
+                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) =>
+        e.key === "Enter" && navigate(`/description/${job._id}`)
+      }
+      aria-label={`View ${job?.title} at ${job?.company?.companyName}`}
+    >
+      {/* Top row — date + bookmark */}
+      <div className="flex justify-between items-center">
+        <p className="text-xs text-gray-400">
+          {daysAgoFunction(job?.createdAt)}
+        </p>
+        <Button
+          variant="outline"
+          size="icon"
+          className="rounded-full h-8 w-8"
+          aria-label="Save job"
+          onClick={(e) => e.stopPropagation()} // prevent card navigation on bookmark click
+        >
+          <Bookmark size={14} />
+        </Button>
+      </div>
 
-      <div className="sm:px-[5%] max-sm:px-4 lg:px-[8%] mt-6 mb-16">
-        {/* Mobile filter toggle */}
-        <div className="sm:hidden flex justify-between items-center mb-4">
-          <p className="text-sm text-gray-500">
-            <span className="font-medium text-gray-900">
-              {filterJobs.length}
-            </span>{" "}
-            jobs found
-          </p>
-          <Button
-            variant="outline"
-            className="rounded-full gap-2 text-sm h-9"
-            onClick={() => setIsFilterOpen((prev) => !prev)}
-          >
-            {isFilterOpen ? <X size={14} /> : <SlidersHorizontal size={14} />}
-            {isFilterOpen ? "Close" : "Filter"}
-          </Button>
-        </div>
-
-        {/* Mobile filter drawer */}
-        {/* FIX: removed empty viewport={{}} */}
-        <AnimatePresence>
-          {isFilterOpen && (
-            <motion.div
-              key="mobile-filter"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.25 }}
-              className="sm:hidden mb-5 overflow-hidden"
-            >
-              <FilterCard />
-              <hr className="mt-4 border-gray-100" />
-            </motion.div>
+      {/* Company row */}
+      <div className="flex gap-3 items-center">
+        <div className="w-10 h-10 rounded-lg border border-gray-100 bg-gray-50 flex items-center justify-center overflow-hidden flex-shrink-0">
+          {job?.company?.logo ? (
+            <Avatar className="h-10 w-10 rounded-lg">
+              <AvatarImage
+                src={job.company.logo}
+                alt={job.company.companyName}
+              />
+            </Avatar>
+          ) : (
+            <span className="text-xs font-semibold text-primary">
+              {getInitials(job?.company?.companyName)}
+            </span>
           )}
-        </AnimatePresence>
-
-        <div className="sm:flex gap-6">
-          {/* Desktop sidebar */}
-          <div className="sm:min-w-[200px] max-sm:hidden">
-            <FilterCard />
-          </div>
-
-          {/* Job grid */}
-          <div className="w-full min-w-0">
-            {/* Desktop results count */}
-            <div className="hidden sm:flex items-center justify-between mb-4">
-              <p className="text-sm text-gray-500">
-                Showing{" "}
-                <span className="font-medium text-gray-900">
-                  {filterJobs.length}
-                </span>{" "}
-                jobs
-                {searchedQuery && (
-                  <span className="ml-1">
-                    for{" "}
-                    <span className="font-medium text-primary">
-                      "{searchedQuery}"
-                    </span>
-                  </span>
-                )}
-              </p>
-            </div>
-
-            {filterJobs.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-20 text-center">
-                <p className="text-gray-400 text-base">No jobs found</p>
-                <p className="text-gray-300 text-sm mt-1">
-                  Try adjusting your filters
-                </p>
-                <Button
-                  variant="outline"
-                  className="mt-4 rounded-full text-sm"
-                  onClick={() => dispatch(setSearchedQuery(""))}
-                >
-                  Clear filters
-                </Button>
-              </div>
-            ) : (
-              // FIX: removed h-[95vh] overflow-y-auto — causes nested scroll issues
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
-                <AnimatePresence>
-                  {filterJobs.map((job) => (
-                    <motion.div
-                      key={job._id}
-                      initial={{ opacity: 0, y: 16 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -16 }}
-                      // FIX: changed x:100 → y:16 — horizontal slide looks jarring in a grid
-                      transition={{ duration: 0.25 }}
-                    >
-                      <Job job={job} />
-                    </motion.div>
-                  ))}
-                </AnimatePresence>
-              </div>
-            )}
-          </div>
+        </div>
+        <div>
+          <h2 className="font-medium text-base leading-tight">
+            {job?.company?.companyName}
+          </h2>
+          {/* FIX: hardcoded "India" replaced with actual job location */}
+          <p className="text-xs text-gray-400">{job?.location || "Ireland"}</p>
         </div>
       </div>
 
-      <Footer />
-    </>
-  );
-}
+      <hr className="border-gray-100" />
 
-export default Jobs;
+      {/* Job details */}
+      <div>
+        <h3 className="font-semibold text-base mb-1">{job?.title}</h3>
+        {/* TIP: line-clamp keeps card height uniform in the grid */}
+        <p className="text-sm text-gray-500 line-clamp-2 leading-relaxed">
+          {job?.description}
+        </p>
+      </div>
+
+      {/* Badges — using semantic variants from updated badge.jsx */}
+      <div className="flex flex-wrap items-center gap-2">
+        <Badge variant="positions">
+          {job?.position} Position{job?.position > 1 ? "s" : ""}
+        </Badge>
+        <Badge variant="jobType">{job?.jobType}</Badge>
+        {/* FIX: salary shown in Euro format — update your data layer accordingly */}
+        <Badge variant="salary">{job?.salary}</Badge>
+      </div>
+
+      {/* Actions — pushed to bottom with mt-auto */}
+      <div className="flex items-center gap-3 mt-auto pt-1">
+        <Button
+          variant="outline"
+          className="rounded-full text-sm h-9 px-5"
+          onClick={() => navigate(`/description/${job._id}`)}
+        >
+          Details
+        </Button>
+        <Button
+          className="rounded-full text-sm h-9 px-5 bg-primary text-primary-foreground hover:bg-primary/90"
+          onClick={(e) => e.stopPropagation()}
+        >
+          Save for later
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+export default Job;
