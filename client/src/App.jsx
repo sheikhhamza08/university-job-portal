@@ -1,6 +1,8 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./components/auth/Login";
 import Signup from "./components/auth/Signup";
+import Browse from "./components/Browse";
+
 const appRouter = createBrowserRouter([
   // for student role
   {
@@ -10,6 +12,10 @@ const appRouter = createBrowserRouter([
   {
     path: "/signup",
     element: <Signup />,
+  },
+  {
+    path: "/browse",
+    element: <Browse />,
   },
 ]);
 

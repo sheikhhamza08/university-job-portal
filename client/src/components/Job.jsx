@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Badge } from "./ui/badge";
+// import { Badge } from "./ui/badge";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { useNavigate } from "react-router-dom";
 import { Bookmark } from "lucide-react";
