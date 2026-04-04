@@ -1,211 +1,156 @@
-import React, { useState } from "react";
-// import { Badge } from "./ui/badge";
-import { Avatar, AvatarImage } from "./ui/avatar";
-import { useNavigate } from "react-router-dom";
-import { Bookmark } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import Navbar from "./shared/Navbar";
+import Footer from "./shared/Footer";
+import FilterCard from "./FilterCard";
+import Job from "./Job";
+import { useDispatch, useSelector } from "react-redux";
+import { motion, AnimatePresence } from "framer-motion";
+import useGetAllJobs from "@/hooks/useGetAllJobs";
+import { setSearchedQuery } from "@/redux/jobSlice";
+import { Button } from "./ui/button";
+import { SlidersHorizontal, X } from "lucide-react";
 
-const Job = ({ job }) => {
-  const navigate = useNavigate();
-  const [saved, setSaved] = useState(false);
+function Jobs() {
+  const dispatch = useDispatch();
+  useGetAllJobs();
 
-  const daysAgoFunction = (mongodbTime) => {
-    const createdAt = new Date(mongodbTime);
-    const currentDate = new Date();
-    const differenceInTime = currentDate.getTime() - createdAt.getTime();
-    const differenceInDays = Math.floor(differenceInTime / (1000 * 3600 * 24));
-    return differenceInDays;
-  };
+  const { allJobs, searchedQuery } = useSelector((state) => state.job);
+  const [filterJobs, setFilterJobs] = useState([]);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-  const daysAgo = daysAgoFunction(job?.createdAt);
+  // Filter logic
+  useEffect(() => {
+    if (searchedQuery) {
+      const filtered = allJobs.filter(
+        (job) =>
+          job?.title?.toLowerCase().includes(searchedQuery.toLowerCase()) ||
+          job?.description
+            ?.toLowerCase()
+            .includes(searchedQuery.toLowerCase()) ||
+          job?.location?.toLowerCase().includes(searchedQuery.toLowerCase()) ||
+          job?.salary?.toLowerCase().includes(searchedQuery.toLowerCase()), // TIP: also filter by salary band
+      );
+      setFilterJobs(filtered);
+    } else {
+      setFilterJobs(allJobs);
+    }
+  }, [allJobs, searchedQuery]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      dispatch(setSearchedQuery(""));
+    };
+  }, [dispatch]);
 
   return (
-    <div
-      className="rounded-xl flex flex-col gap-3 h-full transition-all duration-200 hover:-translate-y-0.5"
-      style={{
-        padding: "1.1rem",
-        border: "0.5px solid oklch(0.929 0.013 255.508)",
-        background: "oklch(1 0 0)",
-        fontFamily: "'Sora', sans-serif",
-        cursor: "pointer",
-      }}
-      onMouseEnter={(e) =>
-        (e.currentTarget.style.borderColor = "oklch(0.554 0.046 257.417)")
-      }
-      onMouseLeave={(e) =>
-        (e.currentTarget.style.borderColor = "oklch(0.929 0.013 255.508)")
-      }
-    >
-      {/* Top row */}
-      <div className="flex justify-between items-start">
-        <div
-          className="w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden"
-          style={{
-            border: "0.5px solid oklch(0.929 0.013 255.508)",
-            background: "oklch(0.968 0.007 247.896)",
-          }}
-        >
-          <Avatar className="w-8 h-8">
-            <AvatarImage
-              src={
-                job?.company?.logo ||
-                "https://th.bing.com/th/id/OIP.NU9zscMHAn83CpLA9fDjrgHaHa?rs=1&pid=ImgDetMain"
-              }
-            />
-          </Avatar>
+    <>
+      <Navbar />
+
+      <div className="sm:px-[5%] max-sm:px-4 lg:px-[8%] mt-6 mb-16">
+        {/* Mobile filter toggle */}
+        <div className="sm:hidden flex justify-between items-center mb-4">
+          <p className="text-sm text-gray-500">
+            <span className="font-medium text-gray-900">
+              {filterJobs.length}
+            </span>{" "}
+            jobs found
+          </p>
+          <Button
+            variant="outline"
+            className="rounded-full gap-2 text-sm h-9"
+            onClick={() => setIsFilterOpen((prev) => !prev)}
+          >
+            {isFilterOpen ? <X size={14} /> : <SlidersHorizontal size={14} />}
+            {isFilterOpen ? "Close" : "Filter"}
+          </Button>
         </div>
-        <div className="flex flex-col items-end gap-1">
-          <span
-            className="text-xs"
-            style={{
-              color: "oklch(0.554 0.046 257.417)",
-              fontFamily: "'DM Mono', monospace",
-            }}
-          >
-            {daysAgo === 0 ? "Today" : `${daysAgo}d ago`}
-          </span>
-          <button
-            onClick={() => setSaved(!saved)}
-            className="w-7 h-7 rounded-md flex items-center justify-center transition-colors"
-            style={{
-              border: "0.5px solid oklch(0.929 0.013 255.508)",
-              background: saved ? "oklch(0.208 0.042 265.755)" : "transparent",
-              color: saved
-                ? "oklch(0.984 0.003 247.858)"
-                : "oklch(0.554 0.046 257.417)",
-              cursor: "pointer",
-            }}
-            aria-label="Save job"
-          >
-            <Bookmark size={13} fill={saved ? "currentColor" : "none"} />
-          </button>
-        </div>
-      </div>
 
-      {/* Company info */}
-      <div>
-        <p
-          className="text-sm font-semibold"
-          style={{ color: "oklch(0.129 0.042 264.695)" }}
-        >
-          {job?.company?.companyName}
-        </p>
-        <p className="text-xs" style={{ color: "oklch(0.554 0.046 257.417)" }}>
-          📍 {job?.location || "Dublin, Ireland"}
-        </p>
-      </div>
+        {/* Mobile filter drawer */}
+        {/* FIX: removed empty viewport={{}} */}
+        <AnimatePresence>
+          {isFilterOpen && (
+            <motion.div
+              key="mobile-filter"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.25 }}
+              className="sm:hidden mb-5 overflow-hidden"
+            >
+              <FilterCard />
+              <hr className="mt-4 border-gray-100" />
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-      {/* Title & Description */}
-      <div>
-        <h1
-          className="font-semibold text-sm mb-1"
-          style={{
-            color: "oklch(0.129 0.042 264.695)",
-            letterSpacing: "-0.01em",
-            lineHeight: "1.35",
-          }}
-        >
-          {job?.title}
-        </h1>
-        <p
-          className="text-xs line-clamp-2"
-          style={{
-            color: "oklch(0.554 0.046 257.417)",
-            lineHeight: "1.55",
-          }}
-        >
-          {job?.description}
-        </p>
-      </div>
+        <div className="sm:flex gap-6">
+          {/* Desktop sidebar */}
+          <div className="sm:min-w-[200px] max-sm:hidden">
+            <FilterCard />
+          </div>
 
-      {/* Badges */}
-      <div className="flex flex-wrap gap-1.5">
-        <span
-          className="text-xs font-medium px-2 py-0.5 rounded-full"
-          style={{
-            background: "#eff6ff",
-            color: "#1d4ed8",
-            border: "0.5px solid #bfdbfe",
-            fontFamily: "'DM Mono', monospace",
-          }}
-        >
-          {job?.position} positions
-        </span>
-        <span
-          className="text-xs font-medium px-2 py-0.5 rounded-full"
-          style={{
-            background: "#fff1f2",
-            color: "#be123c",
-            border: "0.5px solid #fecdd3",
-            fontFamily: "'DM Mono', monospace",
-          }}
-        >
-          {job?.jobType}
-        </span>
-        <span
-          className="text-xs font-medium px-2 py-0.5 rounded-full"
-          style={{
-            background: "#faf5ff",
-            color: "#7c3aed",
-            border: "0.5px solid #e9d5ff",
-            fontFamily: "'DM Mono', monospace",
-          }}
-        >
-          {job?.salary} LPA
-        </span>
-      </div>
+          {/* Job grid */}
+          <div className="w-full min-w-0">
+            {/* Desktop results count */}
+            <div className="hidden sm:flex items-center justify-between mb-4">
+              <p className="text-sm text-gray-500">
+                Showing{" "}
+                <span className="font-medium text-gray-900">
+                  {filterJobs.length}
+                </span>{" "}
+                jobs
+                {searchedQuery && (
+                  <span className="ml-1">
+                    for{" "}
+                    <span className="font-medium text-primary">
+                      "{searchedQuery}"
+                    </span>
+                  </span>
+                )}
+              </p>
+            </div>
 
-      {/* Footer */}
-      <div
-        className="flex items-center justify-between pt-2 mt-auto"
-        style={{ borderTop: "0.5px solid oklch(0.929 0.013 255.508)" }}
-      >
-        <span
-          className="text-xs font-semibold"
-          style={{
-            fontFamily: "'DM Mono', monospace",
-            color: "oklch(0.129 0.042 264.695)",
-          }}
-        >
-          ₹{job?.salary} LPA
-        </span>
-        <div className="flex gap-2">
-          <button
-            onClick={() => navigate(`/description/${job._id}`)}
-            className="text-xs font-medium px-3 py-1.5 rounded-lg transition-colors"
-            style={{
-              border: "0.5px solid oklch(0.929 0.013 255.508)",
-              background: "transparent",
-              color: "oklch(0.129 0.042 264.695)",
-              fontFamily: "'Sora', sans-serif",
-              cursor: "pointer",
-            }}
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.background = "oklch(0.968 0.007 247.896)")
-            }
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.background = "transparent")
-            }
-          >
-            Details
-          </button>
-          <button
-            className="text-xs font-medium px-3 py-1.5 rounded-lg transition-opacity"
-            style={{
-              background: "oklch(0.208 0.042 265.755)",
-              color: "oklch(0.984 0.003 247.858)",
-              border: "none",
-              fontFamily: "'Sora', sans-serif",
-              cursor: "pointer",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.85")}
-            onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
-          >
-            Apply Now
-          </button>
+            {filterJobs.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-20 text-center">
+                <p className="text-gray-400 text-base">No jobs found</p>
+                <p className="text-gray-300 text-sm mt-1">
+                  Try adjusting your filters
+                </p>
+                <Button
+                  variant="outline"
+                  className="mt-4 rounded-full text-sm"
+                  onClick={() => dispatch(setSearchedQuery(""))}
+                >
+                  Clear filters
+                </Button>
+              </div>
+            ) : (
+              // FIX: removed h-[95vh] overflow-y-auto — causes nested scroll issues
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+                <AnimatePresence>
+                  {filterJobs.map((job) => (
+                    <motion.div
+                      key={job._id}
+                      initial={{ opacity: 0, y: 16 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -16 }}
+                      // FIX: changed x:100 → y:16 — horizontal slide looks jarring in a grid
+                      transition={{ duration: 0.25 }}
+                    >
+                      <Job job={job} />
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+
+      <Footer />
+    </>
   );
-};
+}
 
-export default Job;
+export default Jobs;
