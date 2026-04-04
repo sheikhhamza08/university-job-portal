@@ -19,7 +19,7 @@ const categories = [
   "Graphic Designer",
   "Full Stack Developer",
   "DevOps Engineer",
-  "Cyber Security", // FIX: removed trailing space
+  "Cyber Security",
 ];
 
 function CategoryCarousel() {
