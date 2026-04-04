@@ -20,8 +20,8 @@ import {
   Sun,
 } from "lucide-react";
 import { motion } from "framer-motion";
-import { USER_API_END_POINT } from "../../utils/constant";
 import { colors } from "../../utils/colors";
+import { USER_API_END_POINT } from "../../utils/constant";
 
 const Login = () => {
   const navigate = useNavigate();

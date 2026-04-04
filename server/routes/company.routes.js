@@ -3,9 +3,10 @@ import {
   getCompanyDetailsById,
   getCompanyDetailsByUser,
   registerCompany,
+  updateCompany,
 } from "../controllers/company.controllers.js";
 import authUser from "../middlewares/authUser.js";
-import { singleUpload } from "../middleware/multer.js";
+import { singleUpload } from "../middlewares/multer.js";
 
 const companyRouter = express.Router();
 
