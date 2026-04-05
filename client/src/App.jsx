@@ -37,6 +37,14 @@ const appRouter = createBrowserRouter([
     path: "/profile",
     element: <Profile />,
   },
+
+  // for admin role
+  {
+    path: "/admin/companies",
+    element: (
+        <Companies />
+    ),
+  },
 ]);
 
 function App() {
