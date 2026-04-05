@@ -9,7 +9,7 @@ import Navbar from "./shared/Navbar";
 
 const DetailRow = ({ label, value, mono = false }) => (
   <div
-    className="flex flex-col sm:flex-row sm:items-baseline py-2.5"
+    className="flex flex-col sm:flex-row sm:items-baseline py-2.5 gap-4"
     style={{ borderBottom: "0.5px solid oklch(0.929 0.013 255.508)" }}
   >
     <span

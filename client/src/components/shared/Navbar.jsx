@@ -322,7 +322,7 @@ const Navbar = () => {
                       </motion.div>
                     )}
 
-                    <motion.div
+                    {/* <motion.div
                       whileHover={{ x: 5 }}
                       className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 cursor-pointer group"
                     >
@@ -333,9 +333,9 @@ const Navbar = () => {
                       <span className="text-sm font-medium text-gray-700">
                         Settings
                       </span>
-                    </motion.div>
+                    </motion.div> */}
 
-                    <motion.div
+                    {/* <motion.div
                       whileHover={{ x: 5 }}
                       className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 cursor-pointer group"
                     >
@@ -346,7 +346,7 @@ const Navbar = () => {
                       <span className="text-sm font-medium text-gray-700">
                         Help Center
                       </span>
-                    </motion.div>
+                    </motion.div> */}
 
                     <div className="border-t border-gray-100 my-2"></div>
 

@@ -285,14 +285,14 @@ const CompaniesTable = () => {
                             />
                             Edit Company
                           </button>
-                          <div
+                          {/* <div
                             style={{
                               height: "0.5px",
                               background: "oklch(0.929 0.013 255.508)",
                               margin: "3px 0",
                             }}
-                          />
-                          <button
+                          /> */}
+                          {/* <button
                             className="flex items-center gap-2 w-full text-left text-xs font-medium px-3 py-2 rounded-lg transition-colors"
                             style={{
                               color: "#be123c",
@@ -310,7 +310,7 @@ const CompaniesTable = () => {
                           >
                             <Trash2 size={12} style={{ flexShrink: 0 }} />
                             Delete
-                          </button>
+                          </button> */}
                         </div>
                       )}
                     </div>
