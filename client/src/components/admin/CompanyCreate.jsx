@@ -312,20 +312,6 @@ const CompanyCreate = () => {
               </div>
             </div>
           </div>
-
-          {/* Help Section */}
-          <div className="mt-8 text-center">
-            <p className="text-xs" style={{ color: colors.lightBlue }}>
-              Need help?{" "}
-              <a
-                href="/support"
-                className="font-semibold hover:underline"
-                style={{ color: colors.brightBlue }}
-              >
-                Contact support
-              </a>
-            </p>
-          </div>
         </div>
       </div>
     </div>
