@@ -50,7 +50,7 @@ const CompaniesTable = () => {
 
   return (
     <div
-      className="rounded-2xl overflow-hidden"
+      className="rounded-2xl"
       style={{
         border: "0.5px solid oklch(0.929 0.013 255.508)",
         fontFamily: "'Sora', sans-serif",
@@ -82,8 +82,14 @@ const CompaniesTable = () => {
       </div>
 
       {/* Table */}
-      <div style={{ overflowX: "auto" }}>
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+      <div>
+        <table
+          style={{
+            width: "100%",
+            borderCollapse: "collapse",
+            overflowX: "auto",
+          }}
+        >
           <thead>
             <tr
               style={{ borderBottom: "0.5px solid oklch(0.929 0.013 255.508)" }}
@@ -245,7 +251,7 @@ const CompaniesTable = () => {
                             background: "oklch(1 0 0)",
                             border: "0.5px solid oklch(0.929 0.013 255.508)",
                             boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
-                            minWidth: "140px",
+                            minWidth: "150px",
                             padding: "5px",
                           }}
                         >
