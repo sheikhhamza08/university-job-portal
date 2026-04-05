@@ -21,16 +21,18 @@ function Jobs() {
   // Filter logic
   useEffect(() => {
     if (searchedQuery) {
-      const filtered = allJobs.filter(
-        (job) =>
-          job?.title?.toLowerCase().includes(searchedQuery.toLowerCase()) ||
+      const filteredJob = allJobs.filter((job) => {
+        return (
+          job?.title.toLowerCase().includes(searchedQuery.toLowerCase()) ||
           job?.description
-            ?.toLowerCase()
+            .toLowerCase()
             .includes(searchedQuery.toLowerCase()) ||
-          job?.location?.toLowerCase().includes(searchedQuery.toLowerCase()) ||
-          job?.salary?.toLowerCase().includes(searchedQuery.toLowerCase()), // TIP: also filter by salary band
-      );
-      setFilterJobs(filtered);
+          job?.location.toLowerCase().includes(searchedQuery.toLowerCase())
+        );
+        // job?.company.toLowerCase().includes(searchedQuery.toLowerCase())
+      });
+      setFilterJobs(filteredJob);
+      // dispatch(setSearchedQuery(""));
     } else {
       setFilterJobs(allJobs);
     }
