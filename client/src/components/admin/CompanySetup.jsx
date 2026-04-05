@@ -9,6 +9,9 @@ import {
   FileText,
   Upload,
   CheckCircle,
+  Briefcase,
+  Users,
+  Award,
 } from "lucide-react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
@@ -49,7 +52,6 @@ const CompanySetup = () => {
     const file = e.target.files?.[0];
     if (file) {
       setInput({ ...input, file });
-      // Create image preview
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
@@ -109,11 +111,20 @@ const CompanySetup = () => {
     }
   }, [singleCompany, companyId]);
 
+  const colors = {
+    darkNavy: "#1B2C62",
+    brightBlue: "#0393DA",
+    lightBlue: "#8CB2CF",
+    white: "#FDFEFE",
+    primaryGradient: "linear-gradient(135deg, #1B2C62 0%, #0393DA 100%)",
+    secondaryGradient: "linear-gradient(135deg, #0393DA 0%, #8CB2CF 100%)",
+  };
+
   return (
     <div
       className="min-h-screen"
       style={{
-        background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
+        background: `linear-gradient(135deg, ${colors.white} 0%, ${colors.lightBlue}15 100%)`,
       }}
     >
       <div className="px-4 sm:px-[5%] py-8 sm:py-10 max-w-7xl mx-auto">
@@ -129,6 +140,7 @@ const CompanySetup = () => {
                 type="button"
                 variant="ghost"
                 className="flex items-center gap-2 hover:bg-white/50 transition-all duration-300"
+                style={{ color: colors.darkNavy }}
               >
                 <ArrowLeft className="h-4 w-4" />
                 <span>Back</span>
@@ -137,25 +149,34 @@ const CompanySetup = () => {
               <div className="flex items-center gap-3">
                 <div
                   className="p-2 rounded-xl"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #1a472a 0%, #2d5a3b 100%)",
-                  }}
+                  style={{ background: colors.primaryGradient }}
                 >
                   <Building2 className="h-5 w-5 text-white" />
                 </div>
                 <h1
                   className="font-bold text-xl sm:text-2xl"
-                  style={{ color: "#1a472a" }}
+                  style={{ color: colors.darkNavy }}
                 >
                   Company Setup
                 </h1>
               </div>
             </div>
             {singleCompany?.logo && !input.file && (
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-50 border border-green-200">
-                <CheckCircle className="h-4 w-4 text-green-600" />
-                <span className="text-xs text-green-700 font-medium">
+              <div
+                className="flex items-center gap-2 px-3 py-1.5 rounded-full"
+                style={{
+                  background: `${colors.brightBlue}10`,
+                  border: `1px solid ${colors.brightBlue}30`,
+                }}
+              >
+                <CheckCircle
+                  className="h-4 w-4"
+                  style={{ color: colors.brightBlue }}
+                />
+                <span
+                  className="text-xs font-medium"
+                  style={{ color: colors.darkNavy }}
+                >
                   Logo uploaded
                 </span>
               </div>
@@ -163,14 +184,26 @@ const CompanySetup = () => {
           </div>
 
           {/* Main Form Card */}
-          <div className="w-full bg-white rounded-2xl shadow-xl overflow-hidden">
+          <div
+            className="w-full bg-white rounded-2xl shadow-xl overflow-hidden"
+            style={{
+              boxShadow:
+                "0 20px 25px -5px rgba(27, 44, 98, 0.1), 0 10px 10px -5px rgba(27, 44, 98, 0.04)",
+            }}
+          >
             <div className="p-6 sm:p-8">
               {/* Company Logo Preview & Upload */}
-              <div className="flex flex-col items-center mb-8 pb-6 border-b border-gray-100">
+              <div
+                className="flex flex-col items-center mb-8 pb-6 border-b"
+                style={{ borderColor: `${colors.lightBlue}30` }}
+              >
                 <div className="relative mb-4">
                   <div
-                    className="w-28 h-28 rounded-2xl flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 border-2 border-dashed"
-                    style={{ borderColor: "#d1e0d6" }}
+                    className="w-28 h-28 rounded-2xl flex items-center justify-center overflow-hidden border-2 border-dashed transition-all duration-300 hover:scale-105"
+                    style={{
+                      background: `linear-gradient(135deg, ${colors.white} 0%, ${colors.lightBlue}10 100%)`,
+                      borderColor: `${colors.lightBlue}50`,
+                    }}
                   >
                     {imagePreview ? (
                       <img
@@ -181,17 +214,14 @@ const CompanySetup = () => {
                     ) : (
                       <Building2
                         className="h-12 w-12"
-                        style={{ color: "#8ba89a" }}
+                        style={{ color: colors.lightBlue }}
                       />
                     )}
                   </div>
                   <label
                     htmlFor="logo-upload"
-                    className="absolute -bottom-2 -right-2 p-1.5 rounded-full cursor-pointer transition-all duration-200 hover:scale-110"
-                    style={{
-                      background:
-                        "linear-gradient(135deg, #1a472a 0%, #2d5a3b 100%)",
-                    }}
+                    className="absolute -bottom-2 -right-2 p-1.5 rounded-full cursor-pointer transition-all duration-200 hover:scale-110 shadow-lg"
+                    style={{ background: colors.primaryGradient }}
                   >
                     <Upload className="h-3.5 w-3.5 text-white" />
                   </label>
@@ -205,7 +235,7 @@ const CompanySetup = () => {
                 </div>
                 <p
                   className="text-xs text-center mt-2"
-                  style={{ color: "#8ba89a" }}
+                  style={{ color: colors.lightBlue }}
                 >
                   Click the upload button to change logo
                   <br />
@@ -218,9 +248,12 @@ const CompanySetup = () => {
                 <div className="space-y-2">
                   <Label
                     className="text-sm font-semibold flex items-center gap-2"
-                    style={{ color: "#1a472a" }}
+                    style={{ color: colors.darkNavy }}
                   >
-                    <Building2 className="h-4 w-4" />
+                    <Building2
+                      className="h-4 w-4"
+                      style={{ color: colors.brightBlue }}
+                    />
                     Company Name
                   </Label>
                   <Input
@@ -229,7 +262,11 @@ const CompanySetup = () => {
                     value={input.companyName}
                     onChange={changeEventHandler}
                     placeholder="Enter company name"
-                    className="border-gray-200 focus:border-green-500 focus:ring-green-500 transition-all duration-200"
+                    className="border-gray-200 focus:border-blue-500 focus:ring-blue-500 transition-all duration-200"
+                    style={{
+                      borderColor: `${colors.lightBlue}50`,
+                      focusBorderColor: colors.brightBlue,
+                    }}
                     required
                   />
                 </div>
@@ -237,9 +274,12 @@ const CompanySetup = () => {
                 <div className="space-y-2">
                   <Label
                     className="text-sm font-semibold flex items-center gap-2"
-                    style={{ color: "#1a472a" }}
+                    style={{ color: colors.darkNavy }}
                   >
-                    <MapPin className="h-4 w-4" />
+                    <MapPin
+                      className="h-4 w-4"
+                      style={{ color: colors.brightBlue }}
+                    />
                     Location
                   </Label>
                   <Input
@@ -248,7 +288,8 @@ const CompanySetup = () => {
                     value={input.location}
                     onChange={changeEventHandler}
                     placeholder="Dublin, Ireland"
-                    className="border-gray-200 focus:border-green-500 focus:ring-green-500 transition-all duration-200"
+                    className="border-gray-200 focus:border-blue-500 focus:ring-blue-500 transition-all duration-200"
+                    style={{ borderColor: `${colors.lightBlue}50` }}
                     required
                   />
                 </div>
@@ -256,9 +297,12 @@ const CompanySetup = () => {
                 <div className="space-y-2 md:col-span-2">
                   <Label
                     className="text-sm font-semibold flex items-center gap-2"
-                    style={{ color: "#1a472a" }}
+                    style={{ color: colors.darkNavy }}
                   >
-                    <FileText className="h-4 w-4" />
+                    <FileText
+                      className="h-4 w-4"
+                      style={{ color: colors.brightBlue }}
+                    />
                     Description
                   </Label>
                   <Textarea
@@ -266,7 +310,8 @@ const CompanySetup = () => {
                     value={input.description}
                     onChange={changeEventHandler}
                     placeholder="Tell us about your company..."
-                    className="border-gray-200 focus:border-green-500 focus:ring-green-500 transition-all duration-200 min-h-[100px]"
+                    className="border-gray-200 focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 min-h-[120px] resize-y"
+                    style={{ borderColor: `${colors.lightBlue}50` }}
                     required
                   />
                 </div>
@@ -274,9 +319,12 @@ const CompanySetup = () => {
                 <div className="space-y-2">
                   <Label
                     className="text-sm font-semibold flex items-center gap-2"
-                    style={{ color: "#1a472a" }}
+                    style={{ color: colors.darkNavy }}
                   >
-                    <Globe className="h-4 w-4" />
+                    <Globe
+                      className="h-4 w-4"
+                      style={{ color: colors.brightBlue }}
+                    />
                     Website
                   </Label>
                   <Input
@@ -285,7 +333,8 @@ const CompanySetup = () => {
                     value={input.website}
                     onChange={changeEventHandler}
                     placeholder="https://www.example.com"
-                    className="border-gray-200 focus:border-green-500 focus:ring-green-500 transition-all duration-200"
+                    className="border-gray-200 focus:border-blue-500 focus:ring-blue-500 transition-all duration-200"
+                    style={{ borderColor: `${colors.lightBlue}50` }}
                     required
                   />
                 </div>
@@ -293,9 +342,12 @@ const CompanySetup = () => {
                 <div className="space-y-2">
                   <Label
                     className="text-sm font-semibold flex items-center gap-2"
-                    style={{ color: "#1a472a" }}
+                    style={{ color: colors.darkNavy }}
                   >
-                    <Upload className="h-4 w-4" />
+                    <Upload
+                      className="h-4 w-4"
+                      style={{ color: colors.brightBlue }}
+                    />
                     Company Logo
                   </Label>
                   <div className="flex items-center gap-3">
@@ -303,57 +355,158 @@ const CompanySetup = () => {
                       type="file"
                       accept="image/*"
                       onChange={changeFileHandler}
-                      className="border-gray-200 focus:border-green-500 focus:ring-green-500 transition-all duration-200 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gradient-to-r file:from-green-50 file:to-emerald-50 file:text-green-700 hover:file:bg-gradient-to-r hover:file:from-green-100 hover:file:to-emerald-100"
+                      className="border-gray-200 focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                      style={{ borderColor: `${colors.lightBlue}50` }}
                     />
                   </div>
                 </div>
               </div>
             </div>
 
+            {/* Stats Section */}
+            <div
+              className="px-6 sm:px-8 py-5 bg-gradient-to-r from-blue-50 to-cyan-50 border-t border-b"
+              style={{ borderColor: `${colors.lightBlue}20` }}
+            >
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="flex items-center gap-3">
+                  <div
+                    className="p-2 rounded-lg"
+                    style={{ background: `${colors.brightBlue}15` }}
+                  >
+                    <Briefcase
+                      className="h-4 w-4"
+                      style={{ color: colors.brightBlue }}
+                    />
+                  </div>
+                  <div>
+                    <p className="text-xs" style={{ color: colors.lightBlue }}>
+                      Industry
+                    </p>
+                    <p
+                      className="text-sm font-semibold"
+                      style={{ color: colors.darkNavy }}
+                    >
+                      Education Technology
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div
+                    className="p-2 rounded-lg"
+                    style={{ background: `${colors.brightBlue}15` }}
+                  >
+                    <Users
+                      className="h-4 w-4"
+                      style={{ color: colors.brightBlue }}
+                    />
+                  </div>
+                  <div>
+                    <p className="text-xs" style={{ color: colors.lightBlue }}>
+                      Company Size
+                    </p>
+                    <p
+                      className="text-sm font-semibold"
+                      style={{ color: colors.darkNavy }}
+                    >
+                      500-1000 employees
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div
+                    className="p-2 rounded-lg"
+                    style={{ background: `${colors.brightBlue}15` }}
+                  >
+                    <Award
+                      className="h-4 w-4"
+                      style={{ color: colors.brightBlue }}
+                    />
+                  </div>
+                  <div>
+                    <p className="text-xs" style={{ color: colors.lightBlue }}>
+                      Founded
+                    </p>
+                    <p
+                      className="text-sm font-semibold"
+                      style={{ color: colors.darkNavy }}
+                    >
+                      1975
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Action Buttons */}
-            <div className="px-6 sm:px-8 py-5 bg-gray-50 border-t border-gray-100 flex flex-col sm:flex-row justify-end gap-3">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => navigate("/admin/companies")}
-                className="order-2 sm:order-1"
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                disabled={loading}
-                className="order-1 sm:order-2 bg-gradient-to-r from-green-700 to-emerald-600 hover:from-green-800 hover:to-emerald-700 text-white shadow-md hover:shadow-lg transition-all duration-300"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Updating...
-                  </>
-                ) : (
-                  <>
-                    <CheckCircle className="mr-2 h-4 w-4" />
-                    Update Company
-                  </>
-                )}
-              </Button>
+            <div
+              className="px-6 sm:px-8 py-5 bg-gray-50 border-t"
+              style={{ borderColor: `${colors.lightBlue}20` }}
+            >
+              <div className="flex flex-col sm:flex-row justify-end gap-3">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => navigate("/admin/companies")}
+                  className="order-2 sm:order-1 hover:bg-gray-100"
+                  style={{
+                    borderColor: colors.lightBlue,
+                    color: colors.darkNavy,
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  className="order-1 sm:order-2 text-white shadow-md hover:shadow-lg transition-all duration-300"
+                  style={{
+                    background: colors.primaryGradient,
+                    hoverBackground: `linear-gradient(135deg, ${colors.darkNavy} 0%, ${colors.brightBlue} 100%)`,
+                  }}
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Updating...
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle className="mr-2 h-4 w-4" />
+                      Update Company
+                    </>
+                  )}
+                </Button>
+              </div>
             </div>
           </div>
 
           {/* Info Banner */}
-          <div className="w-full bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-4 border border-green-100">
+          <div
+            className="w-full rounded-xl p-4 border transition-all duration-300 hover:shadow-md"
+            style={{
+              background: `linear-gradient(135deg, ${colors.white} 0%, ${colors.lightBlue}10 100%)`,
+              borderColor: `${colors.lightBlue}30`,
+            }}
+          >
             <div className="flex items-start gap-3">
-              <div className="p-1.5 rounded-lg bg-green-100">
-                <Building2 className="h-4 w-4 text-green-700" />
+              <div
+                className="p-1.5 rounded-lg"
+                style={{ background: `${colors.brightBlue}15` }}
+              >
+                <Building2
+                  className="h-4 w-4"
+                  style={{ color: colors.brightBlue }}
+                />
               </div>
               <div>
                 <h4
                   className="text-sm font-semibold mb-1"
-                  style={{ color: "#1a472a" }}
+                  style={{ color: colors.darkNavy }}
                 >
                   Dublin Business School
                 </h4>
-                <p className="text-xs" style={{ color: "#5a7c6a" }}>
+                <p className="text-xs" style={{ color: colors.lightBlue }}>
                   Ireland's leading independent college offering undergraduate,
                   postgraduate & part-time courses.
                 </p>
