@@ -131,10 +131,7 @@ const CompanySetup = () => {
         }}
       >
         <div className="px-4 sm:px-[5%] py-8 sm:py-10 max-w-7xl mx-auto">
-          <form
-            onSubmit={submitHandler}
-            className="flex flex-col items-center gap-6"
-          >
+          <form onSubmit={submitHandler} className="flex flex-col items-center">
             {/* Header Section */}
             <div className="w-full flex flex-col sm:flex-row justify-between items-center gap-4 mb-4">
               <div className="flex gap-4 items-center w-full sm:w-auto">
