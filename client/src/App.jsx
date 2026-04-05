@@ -10,6 +10,7 @@ import ProtectedRoute from "./components/admin/ProtectedRoute";
 import Companies from "./components/admin/Companies";
 import CompanySetup from "./components/admin/CompanySetup";
 import CompanyCreate from "./components/admin/CompanyCreate";
+import AdminJobs from "./components/admin/AdminJobs";
 
 const appRouter = createBrowserRouter([
   // for student role
@@ -64,6 +65,14 @@ const appRouter = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <CompanyCreate />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/admin/jobs",
+    element: (
+      <ProtectedRoute>
+        <AdminJobs />
       </ProtectedRoute>
     ),
   },
