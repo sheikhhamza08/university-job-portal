@@ -15,13 +15,14 @@ import {
 } from "lucide-react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
 import axios from "axios";
 import { COMPANY_API_END_POINT } from "@/utils/constant";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
 import useGetCompanyById from "@/hooks/useGetCompanyById";
+import { Textarea } from "../ui/Textarea ";
+import Navbar from "../shared/Navbar";
 
 const CompanySetup = () => {
   const [loading, setLoading] = useState(false);
@@ -121,104 +122,106 @@ const CompanySetup = () => {
   };
 
   return (
-    <div
-      className="min-h-screen"
-      style={{
-        background: `linear-gradient(135deg, ${colors.white} 0%, ${colors.lightBlue}15 100%)`,
-      }}
-    >
-      <div className="px-4 sm:px-[5%] py-8 sm:py-10 max-w-7xl mx-auto">
-        <form
-          onSubmit={submitHandler}
-          className="flex flex-col items-center gap-6"
-        >
-          {/* Header Section */}
-          <div className="w-full flex flex-col sm:flex-row justify-between items-center gap-4 mb-4">
-            <div className="flex gap-4 items-center w-full sm:w-auto">
-              <Button
-                onClick={() => navigate("/admin/companies")}
-                type="button"
-                variant="ghost"
-                className="flex items-center gap-2 hover:bg-white/50 transition-all duration-300"
-                style={{ color: colors.darkNavy }}
-              >
-                <ArrowLeft className="h-4 w-4" />
-                <span>Back</span>
-              </Button>
-              <div className="h-8 w-px bg-gray-300 hidden sm:block" />
-              <div className="flex items-center gap-3">
-                <div
-                  className="p-2 rounded-xl"
-                  style={{ background: colors.primaryGradient }}
-                >
-                  <Building2 className="h-5 w-5 text-white" />
-                </div>
-                <h1
-                  className="font-bold text-xl sm:text-2xl"
-                  style={{ color: colors.darkNavy }}
-                >
-                  Company Setup
-                </h1>
-              </div>
-            </div>
-            {singleCompany?.logo && !input.file && (
-              <div
-                className="flex items-center gap-2 px-3 py-1.5 rounded-full"
-                style={{
-                  background: `${colors.brightBlue}10`,
-                  border: `1px solid ${colors.brightBlue}30`,
-                }}
-              >
-                <CheckCircle
-                  className="h-4 w-4"
-                  style={{ color: colors.brightBlue }}
-                />
-                <span
-                  className="text-xs font-medium"
-                  style={{ color: colors.darkNavy }}
-                >
-                  Logo uploaded
-                </span>
-              </div>
-            )}
-          </div>
-
-          {/* Main Form Card */}
-          <div
-            className="w-full bg-white rounded-2xl shadow-xl overflow-hidden"
-            style={{
-              boxShadow:
-                "0 20px 25px -5px rgba(27, 44, 98, 0.1), 0 10px 10px -5px rgba(27, 44, 98, 0.04)",
-            }}
+    <>
+      <Navbar />
+      <div
+        className="min-h-screen"
+        style={{
+          background: `linear-gradient(135deg, ${colors.white} 0%, ${colors.lightBlue}15 100%)`,
+        }}
+      >
+        <div className="px-4 sm:px-[5%] py-8 sm:py-10 max-w-7xl mx-auto">
+          <form
+            onSubmit={submitHandler}
+            className="flex flex-col items-center gap-6"
           >
-            <div className="p-6 sm:p-8">
-              {/* Company Logo Preview & Upload */}
-              <div
-                className="flex flex-col items-center mb-8 pb-6 border-b"
-                style={{ borderColor: `${colors.lightBlue}30` }}
-              >
-                <div className="relative mb-4">
+            {/* Header Section */}
+            <div className="w-full flex flex-col sm:flex-row justify-between items-center gap-4 mb-4">
+              <div className="flex gap-4 items-center w-full sm:w-auto">
+                <Button
+                  onClick={() => navigate("/admin/companies")}
+                  type="button"
+                  variant="ghost"
+                  className="flex items-center gap-2 hover:bg-white/50 transition-all duration-300"
+                  style={{ color: colors.darkNavy }}
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                  <span>Back</span>
+                </Button>
+                <div className="h-8 w-px bg-gray-300 hidden sm:block" />
+                <div className="flex items-center gap-3">
                   <div
-                    className="w-28 h-28 rounded-2xl flex items-center justify-center overflow-hidden border-2 border-dashed transition-all duration-300 hover:scale-105"
-                    style={{
-                      background: `linear-gradient(135deg, ${colors.white} 0%, ${colors.lightBlue}10 100%)`,
-                      borderColor: `${colors.lightBlue}50`,
-                    }}
+                    className="p-2 rounded-xl"
+                    style={{ background: colors.primaryGradient }}
                   >
-                    {imagePreview ? (
-                      <img
-                        src={imagePreview}
-                        alt="Company logo"
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <Building2
-                        className="h-12 w-12"
-                        style={{ color: colors.lightBlue }}
-                      />
-                    )}
+                    <Building2 className="h-5 w-5 text-white" />
                   </div>
-                  <label
+                  <h1
+                    className="font-bold text-xl sm:text-2xl"
+                    style={{ color: colors.darkNavy }}
+                  >
+                    Company Setup
+                  </h1>
+                </div>
+              </div>
+              {singleCompany?.logo && !input.file && (
+                <div
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-full"
+                  style={{
+                    background: `${colors.brightBlue}10`,
+                    border: `1px solid ${colors.brightBlue}30`,
+                  }}
+                >
+                  <CheckCircle
+                    className="h-4 w-4"
+                    style={{ color: colors.brightBlue }}
+                  />
+                  <span
+                    className="text-xs font-medium"
+                    style={{ color: colors.darkNavy }}
+                  >
+                    Logo uploaded
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {/* Main Form Card */}
+            <div
+              className="w-full bg-white rounded-2xl shadow-xl overflow-hidden"
+              style={{
+                boxShadow:
+                  "0 20px 25px -5px rgba(27, 44, 98, 0.1), 0 10px 10px -5px rgba(27, 44, 98, 0.04)",
+              }}
+            >
+              <div className="p-6 sm:p-8">
+                {/* Company Logo Preview & Upload */}
+                <div
+                  className="flex flex-col items-center mb-8 pb-6 border-b"
+                  style={{ borderColor: `${colors.lightBlue}30` }}
+                >
+                  <div className="relative mb-4">
+                    <div
+                      className="w-56 h-28 rounded-md flex items-center justify-center overflow-hidden border-2 border-dashed transition-all duration-300"
+                      style={{
+                        background: `linear-gradient(135deg, ${colors.white} 0%, ${colors.lightBlue}10 100%)`,
+                        borderColor: `${colors.lightBlue}50`,
+                      }}
+                    >
+                      {imagePreview ? (
+                        <img
+                          src={imagePreview}
+                          alt="Company logo"
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <Building2
+                          className="h-12 w-12"
+                          style={{ color: colors.lightBlue }}
+                        />
+                      )}
+                    </div>
+                    {/* <label
                     htmlFor="logo-upload"
                     className="absolute -bottom-2 -right-2 p-1.5 rounded-full cursor-pointer transition-all duration-200 hover:scale-110 shadow-lg"
                     style={{ background: colors.primaryGradient }}
@@ -231,291 +234,176 @@ const CompanySetup = () => {
                     accept="image/*"
                     onChange={changeFileHandler}
                     className="hidden"
-                  />
-                </div>
-                <p
-                  className="text-xs text-center mt-2"
-                  style={{ color: colors.lightBlue }}
-                >
-                  Click the upload button to change logo
-                  <br />
-                  Recommended: Square image, max 2MB
-                </p>
-              </div>
-
-              {/* Form Fields Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label
-                    className="text-sm font-semibold flex items-center gap-2"
-                    style={{ color: colors.darkNavy }}
-                  >
-                    <Building2
-                      className="h-4 w-4"
-                      style={{ color: colors.brightBlue }}
-                    />
-                    Company Name
-                  </Label>
-                  <Input
-                    type="text"
-                    name="companyName"
-                    value={input.companyName}
-                    onChange={changeEventHandler}
-                    placeholder="Enter company name"
-                    className="border-gray-200 focus:border-blue-500 focus:ring-blue-500 transition-all duration-200"
-                    style={{
-                      borderColor: `${colors.lightBlue}50`,
-                      focusBorderColor: colors.brightBlue,
-                    }}
-                    required
-                  />
+                  /> */}
+                  </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label
-                    className="text-sm font-semibold flex items-center gap-2"
-                    style={{ color: colors.darkNavy }}
-                  >
-                    <MapPin
-                      className="h-4 w-4"
-                      style={{ color: colors.brightBlue }}
-                    />
-                    Location
-                  </Label>
-                  <Input
-                    type="text"
-                    name="location"
-                    value={input.location}
-                    onChange={changeEventHandler}
-                    placeholder="Dublin, Ireland"
-                    className="border-gray-200 focus:border-blue-500 focus:ring-blue-500 transition-all duration-200"
-                    style={{ borderColor: `${colors.lightBlue}50` }}
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2 md:col-span-2">
-                  <Label
-                    className="text-sm font-semibold flex items-center gap-2"
-                    style={{ color: colors.darkNavy }}
-                  >
-                    <FileText
-                      className="h-4 w-4"
-                      style={{ color: colors.brightBlue }}
-                    />
-                    Description
-                  </Label>
-                  <Textarea
-                    name="description"
-                    value={input.description}
-                    onChange={changeEventHandler}
-                    placeholder="Tell us about your company..."
-                    className="border-gray-200 focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 min-h-[120px] resize-y"
-                    style={{ borderColor: `${colors.lightBlue}50` }}
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label
-                    className="text-sm font-semibold flex items-center gap-2"
-                    style={{ color: colors.darkNavy }}
-                  >
-                    <Globe
-                      className="h-4 w-4"
-                      style={{ color: colors.brightBlue }}
-                    />
-                    Website
-                  </Label>
-                  <Input
-                    type="url"
-                    name="website"
-                    value={input.website}
-                    onChange={changeEventHandler}
-                    placeholder="https://www.example.com"
-                    className="border-gray-200 focus:border-blue-500 focus:ring-blue-500 transition-all duration-200"
-                    style={{ borderColor: `${colors.lightBlue}50` }}
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label
-                    className="text-sm font-semibold flex items-center gap-2"
-                    style={{ color: colors.darkNavy }}
-                  >
-                    <Upload
-                      className="h-4 w-4"
-                      style={{ color: colors.brightBlue }}
-                    />
-                    Company Logo
-                  </Label>
-                  <div className="flex items-center gap-3">
+                {/* Form Fields Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label
+                      className="text-sm font-semibold flex items-center gap-2"
+                      style={{ color: colors.darkNavy }}
+                    >
+                      <Building2
+                        className="h-4 w-4"
+                        style={{ color: colors.brightBlue }}
+                      />
+                      Company Name
+                    </Label>
                     <Input
-                      type="file"
-                      accept="image/*"
-                      onChange={changeFileHandler}
-                      className="border-gray-200 focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                      type="text"
+                      name="companyName"
+                      value={input.companyName}
+                      onChange={changeEventHandler}
+                      placeholder="Enter company name"
+                      className="border-gray-200 focus:border-blue-500 focus:ring-blue-500 transition-all duration-200"
+                      style={{
+                        borderColor: `${colors.lightBlue}50`,
+                        focusBorderColor: colors.brightBlue,
+                      }}
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label
+                      className="text-sm font-semibold flex items-center gap-2"
+                      style={{ color: colors.darkNavy }}
+                    >
+                      <MapPin
+                        className="h-4 w-4"
+                        style={{ color: colors.brightBlue }}
+                      />
+                      Location
+                    </Label>
+                    <Input
+                      type="text"
+                      name="location"
+                      value={input.location}
+                      onChange={changeEventHandler}
+                      placeholder="Dublin, Ireland"
+                      className="border-gray-200 focus:border-blue-500 focus:ring-blue-500 transition-all duration-200"
                       style={{ borderColor: `${colors.lightBlue}50` }}
+                      required
                     />
+                  </div>
+
+                  <div className="space-y-2 md:col-span-2">
+                    <Label
+                      className="text-sm font-semibold flex items-center gap-2"
+                      style={{ color: colors.darkNavy }}
+                    >
+                      <FileText
+                        className="h-4 w-4"
+                        style={{ color: colors.brightBlue }}
+                      />
+                      Description
+                    </Label>
+                    <Textarea
+                      name="description"
+                      value={input.description}
+                      onChange={changeEventHandler}
+                      placeholder="Tell us about your company..."
+                      className="border-gray-200 focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 min-h-[120px] resize-y"
+                      style={{ borderColor: `${colors.lightBlue}50` }}
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label
+                      className="text-sm font-semibold flex items-center gap-2"
+                      style={{ color: colors.darkNavy }}
+                    >
+                      <Globe
+                        className="h-4 w-4"
+                        style={{ color: colors.brightBlue }}
+                      />
+                      Website
+                    </Label>
+                    <Input
+                      type="url"
+                      name="website"
+                      value={input.website}
+                      onChange={changeEventHandler}
+                      placeholder="https://www.example.com"
+                      className="border-gray-200 focus:border-blue-500 focus:ring-blue-500 transition-all duration-200"
+                      style={{ borderColor: `${colors.lightBlue}50` }}
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label
+                      className="text-sm font-semibold flex items-center gap-2"
+                      style={{ color: colors.darkNavy }}
+                    >
+                      <Upload
+                        className="h-4 w-4"
+                        style={{ color: colors.brightBlue }}
+                      />
+                      Company Logo
+                    </Label>
+                    <div className="flex items-center gap-3">
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        onChange={changeFileHandler}
+                        className="border-gray-200 focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                        style={{ borderColor: `${colors.lightBlue}50` }}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            {/* Stats Section */}
-            <div
-              className="px-6 sm:px-8 py-5 bg-gradient-to-r from-blue-50 to-cyan-50 border-t border-b"
-              style={{ borderColor: `${colors.lightBlue}20` }}
-            >
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="flex items-center gap-3">
-                  <div
-                    className="p-2 rounded-lg"
-                    style={{ background: `${colors.brightBlue}15` }}
-                  >
-                    <Briefcase
-                      className="h-4 w-4"
-                      style={{ color: colors.brightBlue }}
-                    />
-                  </div>
-                  <div>
-                    <p className="text-xs" style={{ color: colors.lightBlue }}>
-                      Industry
-                    </p>
-                    <p
-                      className="text-sm font-semibold"
-                      style={{ color: colors.darkNavy }}
-                    >
-                      Education Technology
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div
-                    className="p-2 rounded-lg"
-                    style={{ background: `${colors.brightBlue}15` }}
-                  >
-                    <Users
-                      className="h-4 w-4"
-                      style={{ color: colors.brightBlue }}
-                    />
-                  </div>
-                  <div>
-                    <p className="text-xs" style={{ color: colors.lightBlue }}>
-                      Company Size
-                    </p>
-                    <p
-                      className="text-sm font-semibold"
-                      style={{ color: colors.darkNavy }}
-                    >
-                      500-1000 employees
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div
-                    className="p-2 rounded-lg"
-                    style={{ background: `${colors.brightBlue}15` }}
-                  >
-                    <Award
-                      className="h-4 w-4"
-                      style={{ color: colors.brightBlue }}
-                    />
-                  </div>
-                  <div>
-                    <p className="text-xs" style={{ color: colors.lightBlue }}>
-                      Founded
-                    </p>
-                    <p
-                      className="text-sm font-semibold"
-                      style={{ color: colors.darkNavy }}
-                    >
-                      1975
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div
-              className="px-6 sm:px-8 py-5 bg-gray-50 border-t"
-              style={{ borderColor: `${colors.lightBlue}20` }}
-            >
-              <div className="flex flex-col sm:flex-row justify-end gap-3">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => navigate("/admin/companies")}
-                  className="order-2 sm:order-1 hover:bg-gray-100"
-                  style={{
-                    borderColor: colors.lightBlue,
-                    color: colors.darkNavy,
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  disabled={loading}
-                  className="order-1 sm:order-2 text-white shadow-md hover:shadow-lg transition-all duration-300"
-                  style={{
-                    background: colors.primaryGradient,
-                    hoverBackground: `linear-gradient(135deg, ${colors.darkNavy} 0%, ${colors.brightBlue} 100%)`,
-                  }}
-                >
-                  {loading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Updating...
-                    </>
-                  ) : (
-                    <>
-                      <CheckCircle className="mr-2 h-4 w-4" />
-                      Update Company
-                    </>
-                  )}
-                </Button>
-              </div>
-            </div>
-          </div>
-
-          {/* Info Banner */}
-          <div
-            className="w-full rounded-xl p-4 border transition-all duration-300 hover:shadow-md"
-            style={{
-              background: `linear-gradient(135deg, ${colors.white} 0%, ${colors.lightBlue}10 100%)`,
-              borderColor: `${colors.lightBlue}30`,
-            }}
-          >
-            <div className="flex items-start gap-3">
+              {/* Action Buttons */}
               <div
-                className="p-1.5 rounded-lg"
-                style={{ background: `${colors.brightBlue}15` }}
+                className="px-6 sm:px-8 py-5 bg-gray-50 border-t"
+                style={{ borderColor: `${colors.lightBlue}20` }}
               >
-                <Building2
-                  className="h-4 w-4"
-                  style={{ color: colors.brightBlue }}
-                />
-              </div>
-              <div>
-                <h4
-                  className="text-sm font-semibold mb-1"
-                  style={{ color: colors.darkNavy }}
-                >
-                  Dublin Business School
-                </h4>
-                <p className="text-xs" style={{ color: colors.lightBlue }}>
-                  Ireland's leading independent college offering undergraduate,
-                  postgraduate & part-time courses.
-                </p>
+                <div className="flex flex-col sm:flex-row justify-end gap-3">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => navigate("/admin/companies")}
+                    className="order-2 sm:order-1 hover:bg-gray-100"
+                    style={{
+                      borderColor: colors.lightBlue,
+                      color: colors.darkNavy,
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type="submit"
+                    disabled={loading}
+                    className="order-1 sm:order-2 text-white shadow-md hover:shadow-lg transition-all duration-300"
+                    style={{
+                      background: colors.primaryGradient,
+                      hoverBackground: `linear-gradient(135deg, ${colors.darkNavy} 0%, ${colors.brightBlue} 100%)`,
+                    }}
+                  >
+                    {loading ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Updating...
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle className="mr-2 h-4 w-4" />
+                        Update Company
+                      </>
+                    )}
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
