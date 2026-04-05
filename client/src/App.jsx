@@ -11,6 +11,7 @@ import Companies from "./components/admin/Companies";
 import CompanySetup from "./components/admin/CompanySetup";
 import CompanyCreate from "./components/admin/CompanyCreate";
 import AdminJobs from "./components/admin/AdminJobs";
+import JobApplicants from "./components/admin/JobApplicants";
 
 const appRouter = createBrowserRouter([
   // for student role
@@ -73,6 +74,14 @@ const appRouter = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <AdminJobs />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/admin/jobs/:id/applicants",
+    element: (
+      <ProtectedRoute>
+        <JobApplicants />
       </ProtectedRoute>
     ),
   },

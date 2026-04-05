@@ -26,7 +26,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { toast } from "sonner";
 import axios from "axios";
 import { APPLICANT_API_END_POINT } from "@/utils/constant";
-import { updateApplicationStatus } from "@/redux/applicationSlice";
 import { Badge } from "../ui/badge";
 
 const shortListingStatus = [
@@ -72,7 +71,6 @@ const JobApplicantsTable = () => {
       );
 
       if (response.data.success) {
-        dispatch(updateApplicationStatus({ applicationId, status }));
         toast.success(`Application ${status} successfully!`);
       }
     } catch (error) {
