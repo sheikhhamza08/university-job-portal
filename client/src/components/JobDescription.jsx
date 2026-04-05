@@ -9,12 +9,15 @@ import Navbar from "./shared/Navbar";
 
 const DetailRow = ({ label, value, mono = false }) => (
   <div
-    className="flex items-baseline py-2.5"
+    className="flex flex-col sm:flex-row sm:items-baseline py-2.5"
     style={{ borderBottom: "0.5px solid oklch(0.929 0.013 255.508)" }}
   >
     <span
-      className="text-xs font-semibold flex-shrink-0"
-      style={{ width: "140px", color: "oklch(0.129 0.042 264.695)" }}
+      className="text-xs font-semibold flex-shrink-0 mb-1 sm:mb-0"
+      style={{
+        width: "auto sm:w-[140px]",
+        color: "oklch(0.129 0.042 264.695)",
+      }}
     >
       {label}
     </span>
@@ -33,10 +36,10 @@ const DetailRow = ({ label, value, mono = false }) => (
 
 const SectionCard = ({ children, className = "" }) => (
   <div
-    className={`rounded-xl ${className}`}
+    className={`rounded-xl p-3 sm:p-5 ${className}`}
     style={{
       border: "0.5px solid oklch(0.929 0.013 255.508)",
-      padding: "1.25rem",
+      padding: "1rem",
     }}
   >
     {children}
@@ -83,13 +86,16 @@ const JobDescription = () => {
         dispatch(
           setSingleJob({
             ...singleJob,
-            applications: [...singleJob.applications, { applicant: user?._id }],
+            applications: [
+              ...singleJob.applications,
+              { applicant: user?._id, status: "pending" },
+            ],
           }),
         );
         toast.success(response.data.message);
       }
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || "Failed to apply");
     }
   };
 
@@ -102,9 +108,9 @@ const JobDescription = () => {
         if (response.data.success) {
           dispatch(setSingleJob(response.data.job));
           setIsApplied(
-            response.data.job.applications.some(
+            response.data.job.applications?.some(
               (application) => application.applicant === user?._id,
-            ),
+            ) || false,
           );
         }
       } catch (error) {
@@ -122,6 +128,21 @@ const JobDescription = () => {
         )
       : 0;
 
+  const getRequirementsArray = () => {
+    if (!singleJob?.requirements) return [];
+    if (Array.isArray(singleJob.requirements)) return singleJob.requirements;
+    if (typeof singleJob.requirements === "string") {
+      return singleJob.requirements.split(",").map((req) => req.trim());
+    }
+    return [];
+  };
+
+  const getCompanyDisplayName = () => {
+    if (singleJob?.company?.companyName) return singleJob.company.companyName;
+    if (typeof singleJob?.company === "string") return "Company";
+    return "Company";
+  };
+
   return (
     <div
       style={{
@@ -132,10 +153,10 @@ const JobDescription = () => {
     >
       <Navbar />
 
-      <div className="px-[6%] my-10 max-w-5xl mx-auto">
-        {/* Breadcrumb */}
+      <div className="px-4 sm:px-[6%] my-6 sm:my-10 max-w-5xl mx-auto">
+        {/* Breadcrumb - Hidden on mobile, show on tablet/desktop */}
         <div
-          className="flex items-center gap-2 text-xs mb-7"
+          className="hidden sm:flex items-center gap-2 text-xs mb-7"
           style={{ color: "oklch(0.554 0.046 257.417)" }}
         >
           <span
@@ -161,28 +182,26 @@ const JobDescription = () => {
 
         {/* Header card */}
         <SectionCard className="mb-5">
-          <div className="flex items-start justify-between gap-4 flex-wrap">
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
             <div className="flex gap-4 items-start">
               {/* Logo */}
               <div
                 className="rounded-xl flex items-center justify-center flex-shrink-0 text-sm font-bold"
                 style={{
-                  width: "52px",
-                  height: "52px",
+                  width: "48px sm:w-[52px]",
+                  height: "48px sm:h-[52px]",
                   border: "0.5px solid oklch(0.929 0.013 255.508)",
                   background: "oklch(0.968 0.007 247.896)",
                   color: "oklch(0.554 0.046 257.417)",
                   fontFamily: "'DM Mono', monospace",
                 }}
               >
-                {singleJob?.company?.companyName?.slice(0, 2).toUpperCase() ||
-                  "CO"}
+                {getCompanyDisplayName().slice(0, 2).toUpperCase()}
               </div>
-              <div>
+              <div className="flex-1">
                 <h1
-                  className="font-bold mb-1"
+                  className="font-bold mb-1 text-lg sm:text-[1.3rem]"
                   style={{
-                    fontSize: "1.3rem",
                     letterSpacing: "-0.025em",
                     lineHeight: "1.2",
                   }}
@@ -193,7 +212,7 @@ const JobDescription = () => {
                   className="text-xs mb-3"
                   style={{ color: "oklch(0.554 0.046 257.417)" }}
                 >
-                  {singleJob?.company?.companyName}
+                  {getCompanyDisplayName()}
                   &nbsp;·&nbsp; 📍 {singleJob?.location}
                   &nbsp;·&nbsp; Posted {singleJob?.createdAt?.split("T")[0]}
                 </p>
@@ -201,38 +220,38 @@ const JobDescription = () => {
                   {[
                     {
                       label: `${singleJob?.position} Positions`,
-                      cls: "badge-blue",
+                      show: singleJob?.position,
                       bg: "#eff6ff",
                       color: "#1d4ed8",
                       border: "#bfdbfe",
                     },
                     {
                       label: singleJob?.jobType,
-                      cls: "badge-red",
+                      show: singleJob?.jobType,
                       bg: "#fff1f2",
                       color: "#be123c",
                       border: "#fecdd3",
                     },
                     {
                       label: `${singleJob?.salary} LPA`,
-                      cls: "badge-purple",
+                      show: singleJob?.salary,
                       bg: "#faf5ff",
                       color: "#7c3aed",
                       border: "#e9d5ff",
                     },
                     {
                       label: `${singleJob?.experienceLevel} yrs exp`,
-                      cls: "badge-green",
+                      show: singleJob?.experienceLevel,
                       bg: "#f0fdf4",
                       color: "#15803d",
                       border: "#bbf7d0",
                     },
                   ].map(
-                    ({ label, bg, color, border }) =>
-                      label && (
+                    ({ label, show, bg, color, border }) =>
+                      show && (
                         <span
                           key={label}
-                          className="text-xs font-medium px-2.5 py-1 rounded-full"
+                          className="text-[11px] sm:text-xs font-medium px-2 py-1 rounded-full"
                           style={{
                             background: bg,
                             color,
@@ -248,38 +267,41 @@ const JobDescription = () => {
               </div>
             </div>
 
-            {/* Apply button */}
-            <button
-              onClick={isApplied ? undefined : applyJobHandler}
-              disabled={isApplied}
-              className="text-sm font-semibold px-5 py-2.5 rounded-xl transition-opacity"
-              style={{
-                background: isApplied
-                  ? "oklch(0.968 0.007 247.896)"
-                  : "oklch(0.208 0.042 265.755)",
-                color: isApplied
-                  ? "oklch(0.554 0.046 257.417)"
-                  : "oklch(0.984 0.003 247.858)",
-                border: isApplied
-                  ? "0.5px solid oklch(0.929 0.013 255.508)"
-                  : "none",
-                cursor: isApplied ? "not-allowed" : "pointer",
-                fontFamily: "'Sora', sans-serif",
-                flexShrink: 0,
-              }}
-            >
-              {isApplied ? "✓ Applied" : "Apply Now"}
-            </button>
+            {/* Apply button - Sticky on mobile */}
+            <div className="sm:block sticky bottom-4 sm:static z-10 mt-2 sm:mt-0">
+              <button
+                onClick={isApplied ? undefined : applyJobHandler}
+                disabled={isApplied}
+                className="w-full sm:w-auto text-sm font-semibold px-5 py-2.5 rounded-xl transition-opacity"
+                style={{
+                  background: isApplied
+                    ? "oklch(0.968 0.007 247.896)"
+                    : "oklch(0.208 0.042 265.755)",
+                  color: isApplied
+                    ? "oklch(0.554 0.046 257.417)"
+                    : "oklch(0.984 0.003 247.858)",
+                  border: isApplied
+                    ? "0.5px solid oklch(0.929 0.013 255.508)"
+                    : "none",
+                  cursor: isApplied ? "not-allowed" : "pointer",
+                  fontFamily: "'Sora', sans-serif",
+                  flexShrink: 0,
+                  boxShadow: isApplied ? "none" : "0 2px 8px rgba(0,0,0,0.1)",
+                }}
+              >
+                {isApplied ? "✓ Applied" : "Apply Now"}
+              </button>
+            </div>
           </div>
         </SectionCard>
 
-        {/* Two-col grid */}
+        {/* Two-col grid - Stack on mobile, side-by-side on desktop */}
         <div
-          className="grid gap-5"
+          className="flex flex-col lg:grid gap-5"
           style={{ gridTemplateColumns: "1fr 260px", alignItems: "start" }}
         >
           {/* Main column */}
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-5 order-1 lg:order-none">
             <SectionCard>
               <SectionHeading>Job Description</SectionHeading>
               <p
@@ -293,11 +315,11 @@ const JobDescription = () => {
               </p>
             </SectionCard>
 
-            {singleJob?.requirements?.length > 0 && (
+            {getRequirementsArray().length > 0 && (
               <SectionCard>
                 <SectionHeading>Requirements</SectionHeading>
                 <ul className="flex flex-col gap-2">
-                  {singleJob.requirements.map((req, i) => (
+                  {getRequirementsArray().map((req, i) => (
                     <li
                       key={i}
                       className="flex items-center gap-2 text-sm"
@@ -340,7 +362,7 @@ const JobDescription = () => {
               />
               <DetailRow
                 label="Total Applicants"
-                value={singleJob?.applications?.length}
+                value={singleJob?.applications?.length || 0}
                 mono
               />
               <div className="flex items-baseline py-2.5">
@@ -366,8 +388,8 @@ const JobDescription = () => {
             </SectionCard>
           </div>
 
-          {/* Sidebar */}
-          <div className="flex flex-col gap-5">
+          {/* Sidebar - Moves above main content on mobile */}
+          <div className="flex flex-col gap-5 order-2 lg:order-none">
             <SectionCard>
               <SectionHeading>Quick Stats</SectionHeading>
               {[
@@ -425,7 +447,7 @@ const JobDescription = () => {
                   className="flex justify-between text-xs mt-1.5"
                   style={{ color: "oklch(0.554 0.046 257.417)" }}
                 >
-                  <span>{singleJob?.applications?.length} applied</span>
+                  <span>{singleJob?.applications?.length || 0} applied</span>
                   <span>{singleJob?.position} seats</span>
                 </div>
               </div>
@@ -445,18 +467,17 @@ const JobDescription = () => {
                     fontFamily: "'DM Mono', monospace",
                   }}
                 >
-                  {singleJob?.company?.companyName?.slice(0, 2).toUpperCase() ||
-                    "CO"}
+                  {getCompanyDisplayName().slice(0, 2).toUpperCase()}
                 </div>
                 <div>
                   <p className="text-sm font-semibold">
-                    {singleJob?.company?.companyName}
+                    {getCompanyDisplayName()}
                   </p>
                   <p
                     className="text-xs"
                     style={{ color: "oklch(0.554 0.046 257.417)" }}
                   >
-                    Technology &amp; Consulting
+                    Technology & Consulting
                   </p>
                 </div>
               </div>
