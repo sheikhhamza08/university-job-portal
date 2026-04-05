@@ -9,6 +9,7 @@ import Profile from "./components/Profile";
 import ProtectedRoute from "./components/admin/ProtectedRoute";
 import Companies from "./components/admin/Companies";
 import CompanySetup from "./components/admin/CompanySetup";
+import CompanyCreate from "./components/admin/CompanyCreate";
 
 const appRouter = createBrowserRouter([
   // for student role
@@ -55,6 +56,14 @@ const appRouter = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <CompanySetup />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/admin/companies/create",
+    element: (
+      <ProtectedRoute>
+        <CompanyCreate />
       </ProtectedRoute>
     ),
   },
