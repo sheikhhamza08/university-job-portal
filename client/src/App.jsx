@@ -6,6 +6,8 @@ import Home from "./components/Home";
 import Jobs from "./components/Jobs";
 import JobDescription from "./components/JobDescription";
 import Profile from "./components/Profile";
+import ProtectedRoute from "./components/admin/ProtectedRoute";
+import Companies from "./components/admin/Companies";
 
 const appRouter = createBrowserRouter([
   // for student role
@@ -42,7 +44,9 @@ const appRouter = createBrowserRouter([
   {
     path: "/admin/companies",
     element: (
+      <ProtectedRoute>
         <Companies />
+      </ProtectedRoute>
     ),
   },
 ]);
