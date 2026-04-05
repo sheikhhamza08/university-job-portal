@@ -22,7 +22,6 @@ import {
 } from "lucide-react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Badge } from "../ui/badge";
 
 const AdminJobsTable = () => {
   const { allAdminJobs, searchJobByText } = useSelector((store) => store.job);
@@ -53,19 +52,37 @@ const AdminJobsTable = () => {
     setFilterJobs(filteredJobs);
   }, [allAdminJobs, searchJobByText]);
 
-  const getStatusBadge = (status) => {
-    switch (status) {
-      case "active":
-        return { color: "#10b981", bg: "#d1fae5", label: "Active" };
-      case "closed":
-        return { color: "#ef4444", bg: "#fee2e2", label: "Closed" };
-      default:
-        return {
-          color: colors.brightBlue,
-          bg: `${colors.brightBlue}15`,
-          label: "Open",
-        };
+  const getStatusBadge = (job) => {
+    // Determine job status based on applications and position
+    const applicationsCount = job?.applications?.length || 0;
+    const positionCount = job?.position || 0;
+
+    if (applicationsCount >= positionCount && positionCount > 0) {
+      return {
+        color: "#ef4444",
+        bg: "#fee2e2",
+        label: "Filled",
+        icon: XCircle,
+      };
+    } else if (applicationsCount > 0) {
+      return {
+        color: "#f59e0b",
+        bg: "#fed7aa",
+        label: "In Progress",
+        icon: Users,
+      };
+    } else {
+      return {
+        color: "#10b981",
+        bg: "#d1fae5",
+        label: "Open",
+        icon: CheckCircle,
+      };
     }
+  };
+
+  const getApplicantCount = (job) => {
+    return job?.applications?.length || 0;
   };
 
   return (
@@ -114,6 +131,18 @@ const AdminJobsTable = () => {
               className="font-semibold"
               style={{ color: colors.darkNavy }}
             >
+              Applicants
+            </TableHead>
+            <TableHead
+              className="font-semibold"
+              style={{ color: colors.darkNavy }}
+            >
+              Positions
+            </TableHead>
+            <TableHead
+              className="font-semibold"
+              style={{ color: colors.darkNavy }}
+            >
               Status
             </TableHead>
             <TableHead
@@ -127,7 +156,11 @@ const AdminJobsTable = () => {
         <TableBody>
           {filterJobs &&
             filterJobs?.map((job) => {
-              const status = getStatusBadge(job.status || "open");
+              const status = getStatusBadge(job);
+              const StatusIcon = status.icon;
+              const applicantsCount = getApplicantCount(job);
+              const positionsLeft = job?.position - applicantsCount;
+
               return (
                 <TableRow
                   key={job._id}
@@ -136,17 +169,10 @@ const AdminJobsTable = () => {
                 >
                   <TableCell className="font-medium">
                     <div className="flex items-center gap-2">
-                      <div
-                        className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold"
-                        style={{
-                          background: `${colors.lightBlue}10`,
-                          color: colors.darkNavy,
-                        }}
+                      <span
+                        style={{ color: colors.darkNavy }}
+                        className="font-medium"
                       >
-                        {job?.company?.companyName?.slice(0, 2).toUpperCase() ||
-                          "CO"}
-                      </div>
-                      <span style={{ color: colors.darkNavy }}>
                         {job?.company?.companyName}
                       </span>
                     </div>
@@ -180,22 +206,44 @@ const AdminJobsTable = () => {
                         style={{ color: colors.lightBlue }}
                       />
                       <span style={{ color: colors.lightBlue }}>
-                        {job?.createdAt?.split("T")[0]}
+                        {new Date(job?.createdAt).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        })}
                       </span>
                     </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <Users
+                        className="h-3.5 w-3.5"
+                        style={{ color: colors.lightBlue }}
+                      />
+                      <span style={{ color: colors.darkNavy, fontWeight: 500 }}>
+                        {applicantsCount}
+                      </span>
+                      {positionsLeft > 0 && (
+                        <span
+                          className="text-xs"
+                          style={{ color: colors.lightBlue }}
+                        >
+                          (/{job?.position})
+                        </span>
+                      )}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <span style={{ color: colors.darkNavy, fontWeight: 500 }}>
+                      {job?.position}
+                    </span>
                   </TableCell>
                   <TableCell>
                     <span
                       className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium"
                       style={{ background: status.bg, color: status.color }}
                     >
-                      {status.label === "Active" ? (
-                        <CheckCircle className="h-3 w-3" />
-                      ) : status.label === "Closed" ? (
-                        <XCircle className="h-3 w-3" />
-                      ) : (
-                        <CheckCircle className="h-3 w-3" />
-                      )}
+                      <StatusIcon className="h-3 w-3" />
                       {status.label}
                     </span>
                   </TableCell>
@@ -233,24 +281,6 @@ const AdminJobsTable = () => {
                               View Applicants
                             </span>
                           </div>
-                          <div
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              // Add edit functionality
-                            }}
-                            className="flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer transition-all duration-200 hover:bg-gray-50"
-                          >
-                            <Edit2
-                              className="h-4 w-4"
-                              style={{ color: colors.lightBlue }}
-                            />
-                            <span
-                              className="text-sm"
-                              style={{ color: colors.darkNavy }}
-                            >
-                              Edit Job
-                            </span>
-                          </div>
                         </div>
                       </PopoverContent>
                     </Popover>
@@ -260,7 +290,7 @@ const AdminJobsTable = () => {
             })}
           {(!filterJobs || filterJobs.length === 0) && (
             <TableRow>
-              <TableCell colSpan={6} className="text-center py-12">
+              <TableCell colSpan={8} className="text-center py-12">
                 <div className="flex flex-col items-center gap-3">
                   <Briefcase
                     className="h-12 w-12 opacity-20"
