@@ -95,15 +95,15 @@ function Profile() {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="rounded-2xl p-7 mb-5"
+          className="rounded-2xl sm:p-6 p-3 mb-5"
           style={{ border: "0.5px solid oklch(0.929 0.013 255.508)" }}
         >
           {/* Top row */}
           <div
-            className="flex items-start justify-between gap-4 mb-6 pb-6"
+            className="flex items-start justify-between gap-4 mb-6 pb-6 flex-col-reverse sm:flex-row"
             style={{ borderBottom: "0.5px solid oklch(0.929 0.013 255.508)" }}
           >
-            <div className="flex items-center gap-4">
+            <div className="sm:flex items-center gap-4">
               <img
                 src={
                   user?.profile?.profilePhoto || "https://github.com/shadcn.png"
@@ -168,7 +168,7 @@ function Profile() {
             ].map(({ icon, label, value }) => (
               <div
                 key={label}
-                className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl"
+                className="flex items-center sm:gap-3 gap-2 sm:px-3.5 px-2 sm:py-2.5 py-1.5 rounded-xl"
                 style={{
                   border: "0.5px solid oklch(0.929 0.013 255.508)",
                   background: "oklch(0.968 0.007 247.896)",
@@ -234,7 +234,7 @@ function Profile() {
             <SectionLabel>Resume</SectionLabel>
             {user?.profile?.resume ? (
               <div
-                className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl"
+                className="flex items-center sm:gap-3 gap-2 sm:px-3.5 px-2 sm:py-2.5 py-1.5 rounded-xl"
                 style={{ border: "0.5px solid oklch(0.929 0.013 255.508)" }}
               >
                 <div

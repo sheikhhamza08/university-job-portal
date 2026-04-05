@@ -15,11 +15,12 @@ import { toast } from "sonner";
 
 const FormRow = ({ label, children }) => (
   <div
+    className="sm:px-6"
     style={{
       display: "grid",
-      gridTemplateColumns: "100px 1fr",
+      gridTemplateColumns: "60px 1fr",
       alignItems: "center",
-      gap: "12px",
+      gap: "8px",
       marginBottom: "12px",
     }}
   >
@@ -28,7 +29,7 @@ const FormRow = ({ label, children }) => (
         fontSize: "11.5px",
         fontWeight: 600,
         color: "oklch(0.129 0.042 264.695)",
-        textAlign: "right",
+        // textAlign: "right",
       }}
     >
       {label}
@@ -104,7 +105,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
           fontFamily: "'Sora', sans-serif",
           borderRadius: "16px",
           border: "0.5px solid oklch(0.929 0.013 255.508)",
-          padding: "1.75rem",
+          padding: "0.75rem",
           maxWidth: "480px",
         }}
         onInteractOutside={() => setOpen(false)}
@@ -248,6 +249,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                 alignItems: "center",
                 gap: "6px",
                 opacity: loading ? 0.75 : 1,
+                justifyContent: "center",
               }}
             >
               {loading && <Loader2 size={13} className="animate-spin" />}
