@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  deleteJob,
   getAllJobs,
   getJobById,
   getRecruiterJobs,
@@ -13,5 +14,6 @@ jobRouter.post("/post", authUser, postJob);
 jobRouter.get("/get", getAllJobs);
 jobRouter.get("/get/:id", getJobById);
 jobRouter.get("/get-recruiter-job", authUser, getRecruiterJobs);
+jobRouter.delete("/delete/:id", authUser, deleteJob);
 
 export default jobRouter;
