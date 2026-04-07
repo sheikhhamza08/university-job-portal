@@ -142,3 +142,41 @@ export const getRecruiterJobs = async (req, res) => {
     console.log(error);
   }
 };
+
+// role === "recruiter"
+export const deleteJob = async (req, res) => {
+  try {
+    const jobId = req.params.id;
+    const userId = req.id;
+
+    const job = await Job.findById(jobId);
+
+    if (!job) {
+      return res.status(404).json({
+        message: "Job not found",
+        success: false,
+      });
+    }
+
+    // Ensure only the recruiter who created the job can delete it
+    if (job.created_by.toString() !== userId) {
+      return res.status(403).json({
+        message: "Unauthorized to delete this job",
+        success: false,
+      });
+    }
+
+    await Job.findByIdAndDelete(jobId);
+
+    return res.status(200).json({
+      message: "Job deleted successfully",
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal server error",
+      success: false,
+    });
+  }
+};
