@@ -145,7 +145,7 @@ const Login = () => {
                 <div className="flex items-center gap-2 mb-2">
                   <Sun className="w-6 h-6 text-white" />
                   <h1 className="text-3xl font-bold text-white">
-                    Welcome Back!
+                    Welcome Back
                   </h1>
                 </div>
                 <p className="text-white/90 text-sm">
