@@ -66,24 +66,3 @@ function Badge({ className, variant, asChild = false, ...props }) {
 }
 
 export { Badge, badgeVariants };
-
-/* ─────────────────────────────────────────────
-   USAGE GUIDE — DBS Job Portal badges
-   ─────────────────────────────────────────────
-
-   BEFORE (hardcoded colors, ghost variant missing):
-   <Badge className="text-blue-700 font-bold" variant="ghost">{job.position} Positions</Badge>
-   <Badge className="text-[#F83002] font-bold" variant="ghost">{job.jobType}</Badge>
-   <Badge className="text-[#7209b7] font-bold" variant="ghost">{job.salary} LPA</Badge>
-
-   AFTER (semantic variants, no hardcoded colors):
-   <Badge variant="positions">{job.position} Position{job.position > 1 ? 's' : ''}</Badge>
-   <Badge variant="jobType">{job.jobType}</Badge>
-   <Badge variant="salary">{job.salary} LPA</Badge>
-
-   Other available variants:
-   <Badge variant="success">New</Badge>
-   <Badge variant="warning">Closing Soon</Badge>
-   <Badge variant="destructive">Expired</Badge>
-   <Badge variant="outline">Remote</Badge>
-───────────────────────────────────────────── */

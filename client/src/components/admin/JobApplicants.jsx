@@ -175,7 +175,7 @@ const JobApplicants = () => {
                   className="text-sm font-semibold"
                   style={{ color: colors.darkNavy }}
                 >
-                  Salary: {jobDetails?.salary} LPA
+                  Salary: €{jobDetails?.salary}
                 </span>
               </div>
             </div>

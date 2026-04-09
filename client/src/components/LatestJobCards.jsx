@@ -78,7 +78,7 @@ function LatestJobCards({ job }) {
           className="text-[#7209b7] font-medium bg-purple-50 border-purple-100"
           variant="outline"
         >
-          {job?.salary} LPA
+          €{job?.salary}
         </Badge>
       </div>
     </div>

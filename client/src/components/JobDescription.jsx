@@ -233,7 +233,7 @@ const JobDescription = () => {
                       border: "#fecdd3",
                     },
                     {
-                      label: `${singleJob?.salary} LPA`,
+                      label: `${singleJob?.salary} Euro`,
                       show: singleJob?.salary,
                       bg: "#faf5ff",
                       color: "#7c3aed",
@@ -349,11 +349,7 @@ const JobDescription = () => {
                 value={`${singleJob?.experienceLevel} yrs minimum`}
                 mono
               />
-              <DetailRow
-                label="Salary"
-                value={`${singleJob?.salary} LPA`}
-                mono
-              />
+              <DetailRow label="Salary" value={`€${singleJob?.salary}`} mono />
               <DetailRow label="Job Type" value={singleJob?.jobType} />
               <DetailRow
                 label="Positions"

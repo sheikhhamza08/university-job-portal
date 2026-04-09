@@ -31,7 +31,7 @@ const filterData = [
   },
   {
     filterType: "Salary",
-    // FIX: changed from LPA (Indian) to Euro bands for Ireland
+    // FIX: changed from LPA (Pakistan) to Euro bands for Ireland
     array: ["€30k–€50k", "€50k–€80k", "€80k–€110k", "€110k+"],
   },
 ];

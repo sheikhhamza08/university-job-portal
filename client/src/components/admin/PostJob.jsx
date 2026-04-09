@@ -140,7 +140,7 @@ const PostJob = () => {
     },
     {
       name: "salary",
-      label: "Salary (LPA)",
+      label: "Salary (€ Euro)",
       icon: DollarSign,
       placeholder: "e.g., 12",
       type: "number",
