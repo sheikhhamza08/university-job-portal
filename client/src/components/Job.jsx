@@ -101,7 +101,7 @@ const Job = ({ job }) => {
         </Badge>
         <Badge variant="jobType">{job?.jobType}</Badge>
         {/* FIX: salary shown in Euro format — update your data layer accordingly */}
-        <Badge variant="salary">{job?.salary}</Badge>
+        <Badge variant="salary">€{job?.salary}</Badge>
       </div>
 
       {/* Actions — pushed to bottom with mt-auto */}
