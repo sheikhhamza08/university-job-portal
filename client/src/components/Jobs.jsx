@@ -18,21 +18,60 @@ function Jobs() {
   const [filterJobs, setFilterJobs] = useState([]);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
+  const filterBySalary = (jobSalary, salaryRange) => {
+    console.log("Filtering salary:", jobSalary, "against range:", salaryRange);
+
+    // Remove € symbol and any spaces
+    let cleanRange = salaryRange.replace(/€/g, "").trim();
+
+    // Handle "€140000+" case
+    if (cleanRange.includes("+")) {
+      const min = parseInt(cleanRange.replace("+", ""));
+      console.log("Salary >= ", min, "Result:", jobSalary >= min);
+      return jobSalary >= min;
+    }
+
+    // Handle ranges like "30000–50000" or "30000-50000"
+    // Split by either – or -
+    const parts = cleanRange.split(/[–-]/);
+    if (parts.length === 2) {
+      const min = parseInt(parts[0]);
+      const max = parseInt(parts[1]);
+      const result = jobSalary >= min && jobSalary <= max;
+      console.log(
+        `Checking if ${jobSalary} is between ${min} and ${max}:`,
+        result,
+      );
+      return result;
+    }
+
+    // console.log("No match found for range:", salaryRange);
+    return false;
+  };
+
   // Filter logic
   useEffect(() => {
     if (searchedQuery) {
       const filteredJob = allJobs.filter((job) => {
-        return (
-          job?.title.toLowerCase().includes(searchedQuery.toLowerCase()) ||
-          job?.description
-            .toLowerCase()
-            .includes(searchedQuery.toLowerCase()) ||
-          job?.location.toLowerCase().includes(searchedQuery.toLowerCase())
-        );
-        // job?.company.toLowerCase().includes(searchedQuery.toLowerCase())
+        // Check if searchedQuery is a salary range or a text query
+        const isSalaryQuery =
+          searchedQuery.includes("€") || searchedQuery.includes("k");
+
+        if (isSalaryQuery) {
+          // Parse the salary range from the query
+          return filterBySalary(job.salary, searchedQuery);
+        } else {
+          // Original text search logic
+          return (
+            job?.title.toLowerCase().includes(searchedQuery.toLowerCase()) ||
+            job?.description
+              .toLowerCase()
+              .includes(searchedQuery.toLowerCase()) ||
+            job?.location.toLowerCase().includes(searchedQuery.toLowerCase())
+          );
+        }
       });
       setFilterJobs(filteredJob);
-      // dispatch(setSearchedQuery(""));
     } else {
       setFilterJobs(allJobs);
     }

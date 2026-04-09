@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { Label } from "./ui/label";
-import { Button } from "./ui/button";
 import { useDispatch } from "react-redux";
 import { setSearchedQuery } from "@/redux/jobSlice";
 import useGetAllJobs from "@/hooks/useGetAllJobs";
 
-// FIX: updated to Ireland-relevant locations and Euro salary bands
 const filterData = [
   {
     filterType: "Location",
@@ -33,11 +31,11 @@ const filterData = [
     filterType: "Salary",
     // FIX: changed from LPA (Pakistan) to Euro bands for Ireland
     array: [
-      "€30000k–€50000k",
-      "€50000k–€80000k",
-      "€80000k–€110000k",
-      "€110000k*140000k",
-      "€140000k+",
+      "€30000–€50000",
+      "€50000–€80000",
+      "€80000–€110000",
+      "€110000–€140000",
+      "€140000+",
     ],
   },
 ];
