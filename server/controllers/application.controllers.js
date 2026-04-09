@@ -77,6 +77,16 @@ export const getAppliedJobs = async (req, res) => {
       });
     }
 
+    // Filter out applications where job is null (deleted)
+    const validApplications = applications.filter((app) => app.job !== null);
+
+    if (validApplications.length === 0) {
+      return res.status(404).json({
+        message: "No active applications found",
+        success: false,
+      });
+    }
+
     return res.status(200).json({
       application,
       success: true,
