@@ -142,7 +142,8 @@ export const updateProfile = async (req, res) => {
     if (file) {
       const fileUri = getDataUri(file);
       cloudResponse = await cloudinary.uploader.upload(fileUri.content, {
-        resource_type: "auto",
+        resource_type: "raw", // for PDF, DOCX, etc.
+        folder: "user-resumes",
       });
     }
 
