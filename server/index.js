@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || "http://localhost:5173",
+  origin: process.env.FRONTEND_URL ,
   credentials: true,
 };
 app.use(cors(corsOptions));
@@ -27,7 +27,7 @@ app.get("/", (req, res) => {
   res.send("Welcome to the server");
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/company", companyRouter);
