@@ -9,6 +9,7 @@ import useGetAllJobs from "@/hooks/useGetAllJobs";
 import { setSearchedQuery } from "@/redux/jobSlice";
 import { Button } from "./ui/button";
 import { SlidersHorizontal, X } from "lucide-react";
+import { filterData } from "../utils";
 
 function Jobs() {
   const dispatch = useDispatch();
@@ -51,30 +52,48 @@ function Jobs() {
 
   // Filter logic
   useEffect(() => {
-    if (searchedQuery) {
-      const filteredJob = allJobs.filter((job) => {
-        // Check if searchedQuery is a salary range or a text query
-        const isSalaryQuery =
-          searchedQuery.includes("€") || searchedQuery.includes("k");
-
-        if (isSalaryQuery) {
-          // Parse the salary range from the query
-          return filterBySalary(job.salary, searchedQuery);
-        } else {
-          // Original text search logic
-          return (
-            job?.title.toLowerCase().includes(searchedQuery.toLowerCase()) ||
-            job?.description
-              .toLowerCase()
-              .includes(searchedQuery.toLowerCase()) ||
-            job?.location.toLowerCase().includes(searchedQuery.toLowerCase())
-          );
-        }
-      });
-      setFilterJobs(filteredJob);
-    } else {
+    if (!searchedQuery) {
       setFilterJobs(allJobs);
+      return;
     }
+
+    const isSalaryQuery =
+      searchedQuery.includes("€") || searchedQuery.includes("+");
+
+    // Check if it's a location filter
+    const isLocationQuery = filterData
+      .find((f) => f.filterType === "Location")
+      ?.array.includes(searchedQuery);
+
+    // Check if it's an industry filter
+    const isIndustryQuery = filterData
+      .find((f) => f.filterType === "Industry")
+      ?.array.includes(searchedQuery);
+
+    const filteredJob = allJobs.filter((job) => {
+      if (isSalaryQuery) {
+        return filterBySalary(job.salary, searchedQuery);
+      }
+
+      if (isLocationQuery) {
+        // ✅ partial match so "Dublin" matches "Dublin, Ireland"
+        return job.location.toLowerCase().includes(searchedQuery.toLowerCase());
+      }
+
+      if (isIndustryQuery) {
+        // ✅ match strictly against title only
+        return job.title.toLowerCase().includes(searchedQuery.toLowerCase());
+      }
+
+      // Fallback: free-text search across title, description, location
+      return (
+        job.title.toLowerCase().includes(searchedQuery.toLowerCase()) ||
+        job.description.toLowerCase().includes(searchedQuery.toLowerCase()) ||
+        job.location.toLowerCase().includes(searchedQuery.toLowerCase())
+      );
+    });
+
+    setFilterJobs(filteredJob);
   }, [allJobs, searchedQuery]);
 
   // Cleanup on unmount

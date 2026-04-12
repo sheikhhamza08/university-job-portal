@@ -34,26 +34,27 @@ const JobApplicants = () => {
     secondaryGradient: "linear-gradient(135deg, #0393DA 0%, #8CB2CF 100%)",
   };
 
-  useEffect(() => {
-    const fetchAllApplicants = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(
-          `${APPLICANT_API_END_POINT}/${jobId}/applicants`,
-          {
-            withCredentials: true,
-          },
-        );
-        if (response.data.success) {
-          dispatch(setAllApplicants(response.data.job));
-          setJobDetails(response.data.job);
-        }
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
+  const fetchAllApplicants = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        `${APPLICANT_API_END_POINT}/${jobId}/applicants`,
+        {
+          withCredentials: true,
+        },
+      );
+      if (response.data.success) {
+        dispatch(setAllApplicants(response.data.job));
+        setJobDetails(response.data.job);
       }
-    };
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchAllApplicants();
   }, [jobId, dispatch]);
 
@@ -269,7 +270,7 @@ const JobApplicants = () => {
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
           </div>
         ) : (
-          <JobApplicantsTable />
+          <JobApplicantsTable fetchAllApplicants={fetchAllApplicants} />
         )}
       </div>
     </div>

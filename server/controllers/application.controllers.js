@@ -2,7 +2,6 @@ import { Application } from "../models/application.model.js";
 import { Job } from "../models/job.model.js";
 
 // for role === "student"
-
 export const applyJob = async (req, res) => {
   try {
     const userId = req.id;
@@ -54,7 +53,6 @@ export const applyJob = async (req, res) => {
 };
 
 // for role === "student"
-
 export const getAppliedJobs = async (req, res) => {
   try {
     const userId = req.id;
@@ -77,18 +75,18 @@ export const getAppliedJobs = async (req, res) => {
       });
     }
 
-    // Filter out applications where job is null (deleted)
-    const validApplications = applications.filter((app) => app.job !== null);
+    // Filter out applications where job is (deleted)
+    const validApplications = application.filter((app) => app.job !== null);
 
     if (validApplications.length === 0) {
       return res.status(404).json({
-        message: "No active applications found",
+        message: "No active application found",
         success: false,
       });
     }
 
     return res.status(200).json({
-      application,
+      validApplications,
       success: true,
     });
   } catch (error) {

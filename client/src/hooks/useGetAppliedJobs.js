@@ -15,8 +15,8 @@ const useGetAppliedJobs = () => {
         });
         // console.log(response.data);
         if (response.data.success) {
-          dispatch(setAllAppliedJobs(response.data.application));
-          console.log(response.data.application);
+          dispatch(setAllAppliedJobs(response.data.validApplications));
+          console.log(response.data.validApplications);
         }
       } catch (error) {
         console.error(error);

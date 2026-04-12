@@ -14,6 +14,7 @@ export const register = async (req, res) => {
         success: false,
       });
     }
+
     const file = req.file;
     let cloudResponse = "";
     if (file) {
@@ -77,7 +78,6 @@ export const login = async (req, res) => {
 
     const isPasswordMatch = await bcrypt.compare(password, user.password);
 
-    // check role is correct or not and also verify password
     if (!isPasswordMatch || role != user.role) {
       return res.status(400).json({
         message: "Incorrect Credentials",
@@ -138,7 +138,6 @@ export const updateProfile = async (req, res) => {
 
     let cloudResponse = "";
 
-    // file upload
     if (file) {
       const fileUri = getDataUri(file);
       cloudResponse = await cloudinary.uploader.upload(fileUri.content, {
@@ -169,7 +168,7 @@ export const updateProfile = async (req, res) => {
     if (bio) user.profile.bio = bio;
     if (skills) user.profile.skills = skillsArray;
 
-    // resume upload
+    // ✅ save secure_url as-is, no replacement
     if (file && cloudResponse) {
       user.profile.resume = cloudResponse.secure_url;
       user.profile.resumeOriginalName = file.originalname;

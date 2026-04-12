@@ -46,7 +46,7 @@ const shortListingStatus = [
   },
 ];
 
-const JobApplicantsTable = () => {
+const JobApplicantsTable = ({ fetchAllApplicants }) => {
   const { allApplicants } = useSelector((store) => store.application);
   const dispatch = useDispatch();
   const [updatingStatus, setUpdatingStatus] = useState(null);
@@ -73,6 +73,7 @@ const JobApplicantsTable = () => {
 
       if (response.data.success) {
         toast.success(`Application ${status} successfully!`);
+        fetchAllApplicants();
       }
     } catch (error) {
       console.log(error);

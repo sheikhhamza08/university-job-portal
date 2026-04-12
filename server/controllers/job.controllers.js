@@ -1,4 +1,5 @@
 import { Job } from "../models/job.model.js";
+import { Application } from "../models/application.model.js";
 
 // role === "recruiter"
 export const postJob = async (req, res) => {
@@ -158,13 +159,15 @@ export const deleteJob = async (req, res) => {
       });
     }
 
-    // Ensure only the recruiter who created the job can delete it
     if (job.created_by.toString() !== userId) {
       return res.status(403).json({
         message: "Unauthorized to delete this job",
         success: false,
       });
     }
+
+    // ✅ Delete all applications linked to this job
+    await Application.deleteMany({ job: jobId });
 
     await Job.findByIdAndDelete(jobId);
 

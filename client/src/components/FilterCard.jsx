@@ -4,41 +4,7 @@ import { Label } from "./ui/label";
 import { useDispatch } from "react-redux";
 import { setSearchedQuery } from "@/redux/jobSlice";
 import useGetAllJobs from "@/hooks/useGetAllJobs";
-
-const filterData = [
-  {
-    filterType: "Location",
-    array: [
-      "Dublin",
-      "Cork",
-      "Galway",
-      "Limerick",
-      "Remote",
-      "Hybrid – Dublin",
-    ],
-  },
-  {
-    filterType: "Industry",
-    array: [
-      "Frontend Developer",
-      "Backend Developer",
-      "Full Stack Developer",
-      "Data Scientist",
-      "Machine Learning",
-    ],
-  },
-  {
-    filterType: "Salary",
-    // FIX: changed from LPA (Pakistan) to Euro bands for Ireland
-    array: [
-      "€30000–€50000",
-      "€50000–€80000",
-      "€80000–€110000",
-      "€110000–€140000",
-      "€140000+",
-    ],
-  },
-];
+import { filterData } from "../utils";
 
 const FilterCard = () => {
   useGetAllJobs();
@@ -47,19 +13,19 @@ const FilterCard = () => {
   const dispatch = useDispatch();
 
   const changeHandler = (value) => {
-    // TIP: toggle off if same value clicked again
+    //toggle off if same value clicked again
     setSelectedValue((prev) => (prev === value ? "" : value));
   };
 
   useEffect(() => {
     dispatch(setSearchedQuery(selectedValue));
-  }, [selectedValue, dispatch]); // FIX: added dispatch to dependency array
+  }, [selectedValue, dispatch]);
 
   return (
     <div className="w-full bg-white py-4 px-4 rounded-xl border border-gray-100">
       <div className="flex items-center justify-between mb-3">
         <h1 className="font-semibold text-base text-gray-900">Filter Jobs</h1>
-        {/* TIP: clear button for better UX */}
+        {/*  clear button for better UX */}
         {selectedValue && (
           <button
             onClick={() => setSelectedValue("")}
@@ -88,7 +54,7 @@ const FilterCard = () => {
               );
               return (
                 <div
-                  key={item} // FIX: key on item string, not idx
+                  key={item} // key on item string, not idx
                   className="flex items-center gap-2 my-1.5"
                 >
                   <RadioGroupItem value={item} id={itemId} />
