@@ -1,13 +1,19 @@
 # 💼 DBS Job Portal App
 
 **Name:** Hamza Sheikh
+
 **Student ID:** 20094037
+
 **Programme:** Masters of Information Systems and Computing
+
 **Module:** Programming for Information Systems
+
 **Lecturer:** Paul Laird
+
 **Date:** 12 April 2026
 
 🌐 **Live Demo → [https://university-job-portal.vercel.app](https://university-job-portal.vercel.app)**
+
 🔗 **Backend API → [https://university-job-portal.onrender.com](https://university-job-portal.onrender.com)**
 
 ---
@@ -441,5 +447,3 @@ npm run dev
 
 - **Frontend → http://localhost:5173**
 - **Backend  → http://localhost:8000**
-
-
